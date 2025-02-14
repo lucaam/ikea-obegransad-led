@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Environment files
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# VSCode and IDE settings
+.vscode/
+.idea/
+
+# Caches
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+
+# Home Assistant build artifacts
+dist/
+build/
+*.tar.gz
+*.whl
+
+# Home Assistant configuration files (e.g., secrets)
+config/.secrets
+config/.config
+
+# HACS temporary files
+hacs.json
+hacs/.hacs
+hacs/.config
+
+# PyInstaller and similar
+*.spec
+
+# File that contains sensitive data
+auth/
+
+# Cookiecutter generated files
+cookiecutter.json

@@ -1,0 +1,23 @@
+{
+  "domain": "ikea_obegransad_led",
+  "name": "IKEA OBEGRÄNSAD Led",
+  "version": "0.0.1",
+  "documentation": "https://github.com/lucaam/ikea-obegransad-led",
+  "issue_tracker": "https://github.com/lucaam/ikea-obegransad-led/issues",
+  "dependencies": [],
+  "config_flow": true,
+  "codeowners": ["@lucaam"],
+  "requirements": ["aiohttp", "voluptuous"],
+  "description": "Integrate IKEA OBEGRÄNSAD Led wall lamp with Home Assistant. Supports controlling brightness and switching on/off.",
+  "start": true,
+  "plataforms": [
+    "light",
+    "switch"
+  ],
+  "integration_type": "local",
+  "supports": [
+    "brightness",
+    "on/off"
+  ],
+  "iot_class": "local_polling"
+}
