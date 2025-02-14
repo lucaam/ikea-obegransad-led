@@ -35,7 +35,6 @@ config/.secrets
 config/.config
 
 # HACS temporary files
-hacs.json
 hacs/.hacs
 hacs/.config
 
