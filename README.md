@@ -2,40 +2,40 @@
 
 ## This code was generated using ChatGPT
 
-Questa integrazione consente di controllare la lampada a muro IKEA OBEGRÄNSAD tramite Home Assistant. Puoi regolare l'intensità della luce e attivare/disattivare la lampada.
+This integration allows you to control the IKEA OBEGRÄNSAD wall light through Home Assistant. You can adjust the light intensity and turn the lamp on/off.
 
-## Installazione tramite HACS
+## Installation via HACS
 
-1. Vai in **HACS** (Home Assistant Community Store).
-2. Aggiungi il repository personalizzato usando il link GitHub del tuo repository.
-3. Dopo aver aggiunto l'integrazione, vai su **Configurazione** > **Integrazioni** e cerca `IKEA OBEGRÄNSAD Led`.
+1. Go to **HACS** (Home Assistant Community Store).
+2. Add the custom repository using your GitHub repository link.
+3. After adding the integration, go to **Configuration** > **Integrations** and search for `IKEA OBEGRÄNSAD Led`.
 
-## Configurazione
+## Configuration
 
-### Passaggi:
+### Steps:
 
-1. Vai su **Configurazione** > **Integrazioni**.
-2. Clicca su **Aggiungi Integrazione** e cerca `IKEA OBEGRÄNSAD Led`.
-3. Inserisci le tue credenziali (username e password) quando richiesto.
+1. Go to **Configuration** > **Integrations**.
+2. Click on **Add Integration** and search for `IKEA OBEGRÄNSAD Led`.
+3. Enter your credentials (username and password) when prompted.
 
-## Funzionalità
+## Features
 
-- Accendi e spegni la lampada.
-- Regola l'intensità della luce (luminosità).
-- Controllo tramite API locali.
+- Turn the lamp on and off.
+- Adjust the light intensity (brightness).
+- Control through local API.
 
-## Problemi e Supporto
+## Issues and Support
 
-Se riscontri problemi, apri un [Issue su GitHub](https://github.com/lucaam/ikea-obegransad-led/issues).
+If you encounter issues, open an [Issue on GitHub](https://github.com/lucaam/ikea-obegransad-led/issues).
 
-## Contribuire
+## Contributing
 
-Se desideri contribuire a questa integrazione, sentiti libero di fare una **Pull Request** o segnalare eventuali bug.
+If you'd like to contribute to this integration, feel free to make a **Pull Request** or report any bugs.
 
-## Autori
+## Authors
 
-- [Il tuo nome](https://github.com/lucaam)
+- [@lucaam](https://github.com/lucaam)
 
-## Licenza
+## License
 
-Questo progetto è sotto licenza MIT.
+This project is licensed under the MIT License.

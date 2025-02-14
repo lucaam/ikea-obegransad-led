@@ -1,4 +1,5 @@
 """Test IKEA OBEGRÄNSAD Led switch."""
+
 from unittest.mock import call
 from unittest.mock import patch
 
