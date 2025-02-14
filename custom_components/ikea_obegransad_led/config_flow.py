@@ -2,17 +2,18 @@
 
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
+
 from .api import IkeaObegransadLedApiClient
-from .const import CONF_PASSWORD, CONF_USERNAME, DOMAIN, PLATFORMS
+from .const import CONF_HOST
+from .const import DOMAIN
 
 
 class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Config flow for ikea_obegransad_led."""
 
     VERSION = 1
-    CONNECTION_CLASS = config_entries.CONN_CLASS_CLOUD_POLL
+    CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_PUSH
 
     def __init__(self):
         """Initialize."""
@@ -23,12 +24,10 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         self._errors = {}
 
         if user_input is not None:
-            valid = await self._test_credentials(
-                user_input[CONF_USERNAME], user_input[CONF_PASSWORD]
-            )
+            valid = await self._test_credentials(user_input[CONF_HOST])
             if valid:
                 return self.async_create_entry(
-                    title=user_input[CONF_USERNAME], data=user_input
+                    title=user_input[CONF_HOST], data=user_input
                 )
             else:
                 self._errors["base"] = "auth"
@@ -37,27 +36,24 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         return await self._show_config_form(user_input)
 
-    @staticmethod
-    @callback
-    def async_get_options_flow(config_entry):
-        return IkeaObegransadLedOptionsFlowHandler(config_entry)
-
     async def _show_config_form(self, user_input):
         """Show the configuration form to edit location data."""
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
-                {vol.Required(CONF_USERNAME): str, vol.Required(CONF_PASSWORD): str}
+                {
+                    vol.Required(CONF_HOST): str,  # Solo host ora
+                }
             ),
             errors=self._errors,
         )
 
-    async def _test_credentials(self, username, password):
-        """Return true if credentials are valid."""
+    async def _test_credentials(self, host):
+        """Return true if the host is valid."""
         try:
             session = async_create_clientsession(self.hass)
-            client = IkeaObegransadLedApiClient(username, password, session)
-            await client.async_get_info()  # Use a valid method to test credentials
+            client = IkeaObegransadLedApiClient(session, host)
+            await client.async_get_info()  # Usa un metodo valido per testare l'host
             return True
         except Exception:
             pass
@@ -65,35 +61,20 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class IkeaObegransadLedOptionsFlowHandler(config_entries.OptionsFlow):
-    """Config flow options handler for ikea_obegransad_led."""
+    """Handle options for ikea_obegransad_led."""
 
     def __init__(self, config_entry):
-        """Initialize HACS options flow."""
+        """Initialize options flow handler."""
         self.config_entry = config_entry
-        self.options = dict(config_entry.options)
+        self._errors = {}
 
     async def async_step_init(self, user_input=None):
-        """Manage the options."""
-        return await self.async_step_user()
-
-    async def async_step_user(self, user_input=None):
-        """Handle a flow initialized by the user."""
+        """Manage the options for IKEA OBEGRÄNSAD Led."""
         if user_input is not None:
-            self.options.update(user_input)
-            return await self._update_options()
+            # Se vuoi aggiornare le opzioni, inserisci qui la logica
+            return self.async_create_entry(title="Options Updated", data=user_input)
 
+        # Aggiungi qui l'interfaccia utente per le opzioni (se necessario)
         return self.async_show_form(
-            step_id="user",
-            data_schema=vol.Schema(
-                {
-                    vol.Required(x, default=self.options.get(x, True)): bool
-                    for x in sorted(PLATFORMS)
-                }
-            ),
-        )
-
-    async def _update_options(self):
-        """Update config entry options."""
-        return self.async_create_entry(
-            title=self.config_entry.data.get(CONF_USERNAME), data=self.options
+            step_id="init", data_schema=vol.Schema({vol.Optional("option_key"): str})
         )

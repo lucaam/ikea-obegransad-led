@@ -1,4 +1,5 @@
 """Test IKEA OBEGRÄNSAD Led config flow."""
+
 from unittest.mock import patch
 
 import pytest
@@ -30,7 +31,10 @@ from .const import MOCK_CONFIG
 @pytest.fixture(autouse=True)
 def bypass_setup_fixture():
     """Prevent setup."""
-    with patch("custom_components.ikea_obegransad_led.async_setup", return_value=True,), patch(
+    with patch(
+        "custom_components.ikea_obegransad_led.async_setup",
+        return_value=True,
+    ), patch(
         "custom_components.ikea_obegransad_led.async_setup_entry",
         return_value=True,
     ):

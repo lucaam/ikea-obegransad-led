@@ -1,5 +1,7 @@
 # IKEA OBEGRÄNSAD Led
 
+## This code was generated using ChatGPT
+
 Questa integrazione consente di controllare la lampada a muro IKEA OBEGRÄNSAD tramite Home Assistant. Puoi regolare l'intensità della luce e attivare/disattivare la lampada.
 
 ## Installazione tramite HACS
@@ -11,6 +13,7 @@ Questa integrazione consente di controllare la lampada a muro IKEA OBEGRÄNSAD t
 ## Configurazione
 
 ### Passaggi:
+
 1. Vai su **Configurazione** > **Integrazioni**.
 2. Clicca su **Aggiungi Integrazione** e cerca `IKEA OBEGRÄNSAD Led`.
 3. Inserisci le tue credenziali (username e password) quando richiesto.

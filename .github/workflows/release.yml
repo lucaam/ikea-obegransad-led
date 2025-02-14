@@ -1,52 +1,52 @@
 ---
-    name: Release
-    
-    # Lifted shamelessly from https://github.com/custom-components/grocy
-    
-    on:
-      release:
-        types: [published]
-    
-    permissions: {}
-    
-    jobs:
-      release_zip_file:
-        name: Prepare and upload release asset
-        runs-on: ubuntu-latest
-        permissions:
-          contents: write
-          id-token: write
-        env:
-          IKEA_OBEGRANSAD_LED_ROOT_DIR: "${{ github.workspace }}/custom_components/ikea-obegransad-led"
-        steps:
-          - name: Check out repository
-            uses: actions/checkout@v4
-    
-          - name: Set release version number in files
-            shell: bash
-            run: |
-              version="${{ github.event.release.tag_name }}"
-              version="${version,,}"
-              version="${version#v}"
-              # update const.py
-              sed -i \
-                "/^VERSION.*=./c\VERSION = \"${version}\"" \
-                "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/const.py"
-              # update manifest.json
-              jq ".version = \"${version}\"" "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/manifest.json" > "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/manifest.json.tmp"
-              mv "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/manifest.json.tmp" "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/manifest.json"
-    
-          - name: Zip the integration directory
-            run: |
-              cd "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}"
-              zip ikea-obegransad-led.zip -r ./
-    
-          - name: 🔏 Sign release package
-            uses: sigstore/gh-action-sigstore-python@v3.0.0
-            with:
-              inputs: "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/ikea-obegransad-led.zip"
-    
-          - name: "Upload the ZIP file to the release"
-            uses: softprops/action-gh-release@v2.2.1
-            with:
-              files: ${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/ikea-obegransad-led.zip
+name: Release
+
+# Lifted shamelessly from https://github.com/custom-components/grocy
+
+on:
+  release:
+    types: [published]
+
+permissions: {}
+
+jobs:
+  release_zip_file:
+    name: Prepare and upload release asset
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    env:
+      IKEA_OBEGRANSAD_LED_ROOT_DIR: "${{ github.workspace }}/custom_components/ikea-obegransad-led"
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set release version number in files
+        shell: bash
+        run: |
+          version="${{ github.event.release.tag_name }}"
+          version="${version,,}"
+          version="${version#v}"
+          # update const.py
+          sed -i \
+            "/^VERSION.*=./c\VERSION = \"${version}\"" \
+            "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/const.py"
+          # update manifest.json
+          jq ".version = \"${version}\"" "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/manifest.json" > "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/manifest.json.tmp"
+          mv "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/manifest.json.tmp" "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/manifest.json"
+
+      - name: Zip the integration directory
+        run: |
+          cd "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}"
+          zip ikea-obegransad-led.zip -r ./
+
+      - name: 🔏 Sign release package
+        uses: sigstore/gh-action-sigstore-python@v3.0.0
+        with:
+          inputs: "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/ikea-obegransad-led.zip"
+
+      - name: "Upload the ZIP file to the release"
+        uses: softprops/action-gh-release@v2.2.1
+        with:
+          files: ${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/ikea-obegransad-led.zip

@@ -1,6 +1,7 @@
 """API Client to interact with IKEA OBEGRÄNSAD Led."""
 
 import logging
+
 import aiohttp
 
 TIMEOUT = 10
@@ -10,23 +11,23 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 HEADERS = {"Content-type": "application/json; charset=UTF-8"}
 
 
-class IkeaObegransadAPI:
+class IkeaObegransadLedApiClient:
     """API client per controllare la lampada LED via REST."""
 
-    def __init__(self, host):
+    def __init__(self, session, host):
         """Inizializza la connessione con l'host del dispositivo."""
+        self.session = session
         self.host = host
-        self.base_url = f"http://{host}/api"
+        self.base_url = f"http://{host}/api"  # Usa l'host configurato
 
     async def _request(self, method, endpoint, params=None):
         """Effettua una richiesta HTTP generica."""
         url = f"{self.base_url}/{endpoint}"
         try:
-            async with aiohttp.ClientSession() as session:
-                async with session.request(method, url, params=params) as response:
-                    if response.status == 200:
-                        return await response.json()
-                    _LOGGER.error("Errore API %s: %s", url, response.status)
+            async with self.session.request(method, url, params=params) as response:
+                if response.status == 200:
+                    return await response.json()
+                _LOGGER.error("Errore API %s: %s", url, response.status)
         except aiohttp.ClientError as err:
             _LOGGER.error("Errore di connessione API: %s", err)
         return None

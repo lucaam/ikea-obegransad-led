@@ -8,16 +8,6 @@
   "config_flow": true,
   "codeowners": ["@lucaam"],
   "requirements": ["aiohttp", "voluptuous"],
-  "description": "Integrate IKEA OBEGRÄNSAD Led wall lamp with Home Assistant. Supports controlling brightness and switching on/off.",
-  "start": true,
-  "plataforms": [
-    "light",
-    "switch"
-  ],
-  "integration_type": "local",
-  "supports": [
-    "brightness",
-    "on/off"
-  ],
+  "integration_type": "device",
   "iot_class": "local_polling"
 }

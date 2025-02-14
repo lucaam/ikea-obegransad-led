@@ -1,4 +1,5 @@
 """Global fixtures for IKEA OBEGRÄNSAD Led integration."""
+
 from unittest.mock import patch
 
 import pytest
@@ -23,7 +24,9 @@ def skip_notifications_fixture():
 @pytest.fixture(name="bypass_get_data")
 def bypass_get_data_fixture():
     """Skip calls to get data from API."""
-    with patch("custom_components.ikea_obegransad_led.IkeaObegransadLedApiClient.async_get_data"):
+    with patch(
+        "custom_components.ikea_obegransad_led.IkeaObegransadLedApiClient.async_get_data"
+    ):
         yield
 
 

@@ -9,106 +9,54 @@ import asyncio
 import logging
 from datetime import timedelta
 
+import homeassistant.helpers.config_validation as cv
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import Config
 from homeassistant.core import HomeAssistant
-from homeassistant.exceptions import ConfigEntryNotReady
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from homeassistant.helpers.update_coordinator import UpdateFailed
 
-from .api import IkeaObegransadLedApiClient
-from .const import CONF_PASSWORD
-from .const import CONF_USERNAME
 from .const import DOMAIN
-from .const import PLATFORMS
-from .const import STARTUP_MESSAGE
 
 SCAN_INTERVAL = timedelta(seconds=30)
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
+# Schema di configurazione vuoto
+CONFIG_SCHEMA = cv.empty_config_schema
 
-async def async_setup(hass: HomeAssistant, config: Config):
-    """Set up this integration using YAML is not supported."""
+
+# Integration setup
+async def async_setup(hass: HomeAssistant, config: dict):
+    """Set up the IKEA OBEGRÄNSAD Led integration."""
+    _LOGGER.info(f"Setting up {DOMAIN} integration.")
     return True
 
 
+# Questo viene chiamato quando viene creata una voce di configurazione o l'utente imposta l'integrazione tramite UI
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    """Set up this integration using UI."""
-    if hass.data.get(DOMAIN) is None:
-        hass.data.setdefault(DOMAIN, {})
-        _LOGGER.info(STARTUP_MESSAGE)  # Log the startup message
+    """Set up the IKEA OBEGRÄNSAD Led integration from a config entry."""
+    _LOGGER.info(f"Setting up IKEA OBEGRÄNSAD Led from config entry: {entry.title}")
 
-    username = entry.data.get(CONF_USERNAME)
-    password = entry.data.get(CONF_PASSWORD)
+    # Aggiungi le piattaforme
+    for platform in entry.options:
+        hass.async_create_task(
+            hass.config_entries.async_forward_entry_setup(entry, platform)
+        )
 
-    session = async_get_clientsession(hass)
-    client = IkeaObegransadLedApiClient(username, password, session)
-
-    coordinator = IkeaObegransadLedDataUpdateCoordinator(hass, client=client)
-    await coordinator.async_refresh()
-
-    if not coordinator.last_update_success:
-        raise ConfigEntryNotReady
-
-    hass.data[DOMAIN][entry.entry_id] = coordinator
-
-    # Add platforms based on the options set by the user
-    for platform in PLATFORMS:
-        if entry.options.get(platform, True):
-            coordinator.platforms.append(platform)
-            hass.async_add_job(
-                hass.config_entries.async_forward_entry_setup(entry, platform)
-            )
-
-    # Add an update listener to reload the entry if needed
-    entry.add_update_listener(async_reload_entry)
     return True
 
 
-class IkeaObegransadLedDataUpdateCoordinator(DataUpdateCoordinator):
-    """Class to manage fetching data from the API."""
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
+    """Unload a config entry."""
+    _LOGGER.info(f"Unloading IKEA OBEGRÄNSAD Led config entry: {entry.title}")
 
-    def __init__(
-        self,
-        hass: HomeAssistant,
-        client: IkeaObegransadLedApiClient,
-    ) -> None:
-        """Initialize."""
-        self.api = client
-        self.platforms = []
-
-        # Initialize the coordinator with the configured update interval
-        super().__init__(hass, _LOGGER, name=DOMAIN, update_interval=SCAN_INTERVAL)
-
-    async def _async_update_data(self):
-        """Update data via library."""
-        try:
-            return await self.api.async_get_data()
-        except Exception as exception:
-            raise UpdateFailed() from exception
-
-
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Handle removal of an entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-    unloaded = all(
-        await asyncio.gather(
-            *[
-                hass.config_entries.async_forward_entry_unload(entry, platform)
-                for platform in PLATFORMS
-                if platform in coordinator.platforms
-            ]
-        )
+    # Scarica tutte le piattaforme associate all'entry
+    unloaded = await asyncio.gather(
+        *[
+            hass.config_entries.async_forward_entry_unload(entry, platform)
+            for platform in entry.options
+        ]
     )
-    if unloaded:
-        hass.data[DOMAIN].pop(entry.entry_id)
 
-    return unloaded
+    # Pulisci i dati associati all'entry
+    hass.data[DOMAIN].pop(entry.entry_id, None)
 
-
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    """Reload config entry."""
-    await async_unload_entry(hass, entry)
-    await async_setup_entry(hass, entry)
+    return all(unloaded)

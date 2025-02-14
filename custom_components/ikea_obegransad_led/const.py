@@ -1,4 +1,5 @@
 """Constants for IKEA OBEGRÄNSAD Led."""
+
 # Base component constants
 NAME = "IKEA OBEGRÄNSAD Led"
 DOMAIN = "ikea_obegransad_led"
@@ -24,8 +25,7 @@ PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH, LIGHT]
 
 # Configuration and options
 CONF_ENABLED = "enabled"
-CONF_USERNAME = "username"
-CONF_PASSWORD = "password"
+CONF_HOST = "host"
 
 # Defaults
 DEFAULT_NAME = "Ikea OBEGRÄNSAD LED Wall Light"
