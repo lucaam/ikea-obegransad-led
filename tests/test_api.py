@@ -1,4 +1,5 @@
 """Tests for IKEA OBEGRÄNSAD Led api."""
+
 import asyncio
 
 import aiohttp
