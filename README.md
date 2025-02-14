@@ -1,41 +1,44 @@
 # IKEA OBEGRÄNSAD Led
 
-## This code was generated using ChatGPT
+Home Assistant addon to control IKEA OBEGRÄNSAD Wall Lamp hacked with [ph1p/ikea-led-obegraensad](https://github.com/ph1p/ikea-led-obegraensad) and a ESP32 device.
 
-Questa integrazione consente di controllare la lampada a muro IKEA OBEGRÄNSAD tramite Home Assistant. Puoi regolare l'intensità della luce e attivare/disattivare la lampada.
+## Installation
 
-## Installazione tramite HACS
+The installation is made easy with the Home Assistant Community Store:
 
-1. Vai in **HACS** (Home Assistant Community Store).
-2. Aggiungi il repository personalizzato usando il link GitHub del tuo repository.
-3. Dopo aver aggiunto l'integrazione, vai su **Configurazione** > **Integrazioni** e cerca `IKEA OBEGRÄNSAD Led`.
+1. Open the Home Assistant Community Store
+2. Add this repository using the following URL: `https://github.com/lucaam/ikea-obegransad-led`
+3. Once added, navigate to **Configuration > Integrations** and look for `IKEA OBEGRÄNSAD Led`
 
-## Configurazione
+## Contributing
 
-### Passaggi:
+Any contributions you make are **greatly appreciated**.
 
-1. Vai su **Configurazione** > **Integrazioni**.
-2. Clicca su **Aggiungi Integrazione** e cerca `IKEA OBEGRÄNSAD Led`.
-3. Inserisci le tue credenziali (username e password) quando richiesto.
+If you have a suggestion that would make this better, please fork the repo and [create a Pull Request](https://github.com/lucaam/ikea-obegransad-led/pulls). You can also simply [open an issue](https://github.com/lucaam/ikea-obegransad-led/issues) with the tag "enhancement".
 
-## Funzionalità
+Way of working:
 
-- Accendi e spegni la lampada.
-- Regola l'intensità della luce (luminosità).
-- Controllo tramite API locali.
+1. Fork the repository
+2. Create your branch (e.g., `feat/feature-name` | `fix/bug-name`, ...)
+3. Commit and push your changes
+4. [Open a Pull Request](https://github.com/lucaam/ikea-obegransad-led/pulls)
 
-## Problemi e Supporto
+## Versioning
 
-Se riscontri problemi, apri un [Issue su GitHub](https://github.com/lucaam/ikea-obegransad-led/issues).
+[SemVer](http://semver.org/) is used for versioning. For the versions available, see the [tags on this repository](https://github.com/lucaam/ikea-obegransad-led/tags). 
 
-## Contribuire
+## Authors
 
-Se desideri contribuire a questa integrazione, sentiti libero di fare una **Pull Request** o segnalare eventuali bug.
+* **Luca Amoriello** - [@lucaam](https://github.com/lucaam)
 
-## Autori
+See also the list of [contributors](https://github.com/lucaam/ikea-obegransad-led/contributors) who participated in this project.
 
-- [Il tuo nome](https://github.com/lucaam)
+## License
 
-## Licenza
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
-Questo progetto è sotto licenza MIT.
+## Acknowledgments
+
+* Hat tip to anyone whose code was used
+* Inspiration
+* etc
