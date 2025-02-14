@@ -18,16 +18,7 @@ The installation is made easy with the Home Assistant Community Store:
 
 ## Contributing
 
-Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and [create a Pull Request](https://github.com/lucaam/ikea-obegransad-led/pulls). You can also simply [open an issue](https://github.com/lucaam/ikea-obegransad-led/issues) with the tag "enhancement".
-
-Way of working:
-
-1. Fork the repository
-2. Create your branch (e.g., `feat/feature-name` | `fix/bug-name`, ...)
-3. Commit and push your changes
-4. [Open a Pull Request](https://github.com/lucaam/ikea-obegransad-led/pulls)
+Any contributions you make are **greatly appreciated**. Please, read [CONTRIBUTING.md](https://github.com/lucaam/ikea-obegransad-led/blob/main/CONTRIBUTING.md) for details on the code of conduct, and the process for submitting pull requests.
 
 ## Versioning
 
