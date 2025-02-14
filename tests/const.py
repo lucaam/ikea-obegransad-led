@@ -1,4 +1,5 @@
 """Constants for IKEA OBEGRÄNSAD Led tests."""
+
 from custom_components.ikea_obegransad_led.const import (
     CONF_PASSWORD,
 )

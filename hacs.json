@@ -1,0 +1,8 @@
+{
+  "name": "IKEA OBEGRÄNSAD Led",
+  "render_readme": true,
+  "zip_release": true,
+  "hide_default_branch": true,
+  "homeassistant": "2021.12.0",
+  "filename": "ikea-obegransad-led.zip"
+}

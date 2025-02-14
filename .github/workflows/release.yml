@@ -17,7 +17,7 @@ jobs:
       contents: write
       id-token: write
     env:
-      IKEA_OBEGRANSAD_LED_ROOT_DIR: "${{ github.workspace }}/custom_components/ikea-obegransad-led"
+      IKEA_OBEGRANSAD_LED_ROOT_DIR: "${{ github.workspace }}/custom_components/ikea_obegransad_led"
     steps:
       - name: Check out repository
         uses: actions/checkout@v4

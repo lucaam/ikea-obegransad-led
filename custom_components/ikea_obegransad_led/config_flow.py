@@ -1,12 +1,13 @@
-"""Adds config flow for IKEA OBEGRÄNSAD Led."""
-
+import logging
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
+import aiohttp
 
 from .api import IkeaObegransadLedApiClient
-from .const import CONF_HOST
-from .const import DOMAIN
+from .const import CONF_HOST, DOMAIN
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -24,13 +25,12 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         self._errors = {}
 
         if user_input is not None:
-            valid = await self._test_credentials(user_input[CONF_HOST])
+            host = user_input[CONF_HOST]
+            valid = await self._test_credentials(host)
             if valid:
-                return self.async_create_entry(
-                    title=user_input[CONF_HOST], data=user_input
-                )
+                return self.async_create_entry(title=host, data=user_input)
             else:
-                self._errors["base"] = "auth"
+                self._errors["base"] = "cannot_connect"
 
             return await self._show_config_form(user_input)
 
@@ -40,41 +40,28 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         """Show the configuration form to edit location data."""
         return self.async_show_form(
             step_id="user",
-            data_schema=vol.Schema(
-                {
-                    vol.Required(CONF_HOST): str,  # Solo host ora
-                }
-            ),
+            data_schema=vol.Schema({vol.Required(CONF_HOST): str}),
             errors=self._errors,
         )
 
     async def _test_credentials(self, host):
         """Return true if the host is valid."""
         try:
+            _LOGGER.debug("Testing connection to %s", host)
             session = async_create_clientsession(self.hass)
             client = IkeaObegransadLedApiClient(session, host)
-            await client.async_get_info()  # Usa un metodo valido per testare l'host
-            return True
-        except Exception:
-            pass
+            response = await client.get_info()  # Corrected method name
+
+            if response:
+                _LOGGER.debug("Received valid response: %s", response)
+                return True
+            else:
+                _LOGGER.warning("Invalid response received: %s", response)
+                return False
+
+        except aiohttp.ClientError as err:
+            _LOGGER.error("Connection error: %s", err)
+        except Exception as err:
+            _LOGGER.exception("Unexpected error: %s", err)
+
         return False
-
-
-class IkeaObegransadLedOptionsFlowHandler(config_entries.OptionsFlow):
-    """Handle options for ikea_obegransad_led."""
-
-    def __init__(self, config_entry):
-        """Initialize options flow handler."""
-        self.config_entry = config_entry
-        self._errors = {}
-
-    async def async_step_init(self, user_input=None):
-        """Manage the options for IKEA OBEGRÄNSAD Led."""
-        if user_input is not None:
-            # Se vuoi aggiornare le opzioni, inserisci qui la logica
-            return self.async_create_entry(title="Options Updated", data=user_input)
-
-        # Aggiungi qui l'interfaccia utente per le opzioni (se necessario)
-        return self.async_show_form(
-            step_id="init", data_schema=vol.Schema({vol.Optional("option_key"): str})
-        )
