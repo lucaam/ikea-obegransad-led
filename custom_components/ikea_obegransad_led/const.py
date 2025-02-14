@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 """Constants for IKEA OBEGRÄNSAD Led."""
 
 # Base component constants
@@ -20,8 +22,9 @@ BINARY_SENSOR = "binary_sensor"
 SENSOR = "sensor"
 SWITCH = "switch"
 LIGHT = "light"
-PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH, LIGHT]
+PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH]
 
+SCAN_INTERVAL = timedelta(seconds=60)
 
 # Configuration and options
 CONF_ENABLED = "enabled"

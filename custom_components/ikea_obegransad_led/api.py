@@ -48,12 +48,24 @@ class IkeaObegransadLedApiClient:
         """Recupera i dati attuali del display LED."""
         return await self._request("GET", "data")
 
-    async def send_message(self, text=None, graph=None, repeat=1, delay=50):
-        """Invia un messaggio al display LED."""
-        params = {"text": text, "repeat": repeat, "delay": delay}
-        if graph:
+    async def send_message(
+        self, text=None, graph=None, repeat=1, delay=50, miny=None, maxy=None, id=None
+    ):
+        """Send message to display."""
+        params = {
+            "text": text,
+            "repeat": repeat,
+            "delay": delay,
+        }
+        if graph is not None:
             params["graph"] = ",".join(map(str, graph))
-        return await self._request("GET", "message", params)
+        if miny is not None:
+            params["miny"] = miny
+        if maxy is not None:
+            params["maxy"] = maxy
+        if id is not None:
+            params["id"] = id
+        return await self._request("GET", "message", params=params)
 
     async def remove_message(self, message_id):
         """Rimuove un messaggio dal display LED."""

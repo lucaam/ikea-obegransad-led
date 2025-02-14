@@ -6,6 +6,10 @@ from .const import ATTRIBUTION
 from .const import DOMAIN
 from .const import NAME
 from .const import VERSION
+import logging
+
+
+_LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
 class IkeaObegransadLedEntity(CoordinatorEntity):
@@ -30,6 +34,15 @@ class IkeaObegransadLedEntity(CoordinatorEntity):
     @property
     def device_state_attributes(self):
         """Return the state attributes."""
+        return {
+            "attribution": ATTRIBUTION,
+            "id": str(self.coordinator.data.get("id")),
+            "integration": DOMAIN,
+        }
+
+    @property
+    def extra_state_attributes(self):
+        """Return extra state attributes."""
         return {
             "attribution": ATTRIBUTION,
             "id": str(self.coordinator.data.get("id")),

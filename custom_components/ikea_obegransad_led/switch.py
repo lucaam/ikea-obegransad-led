@@ -7,6 +7,10 @@ from .const import DOMAIN
 from .const import ICON
 from .const import SWITCH
 from .entity import IkeaObegransadLedEntity
+import logging
+
+
+_LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
 async def async_setup_entry(hass, entry, async_add_devices):

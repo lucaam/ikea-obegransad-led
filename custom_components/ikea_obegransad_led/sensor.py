@@ -5,6 +5,10 @@ from .const import DOMAIN
 from .const import ICON
 from .const import SENSOR
 from .entity import IkeaObegransadLedEntity
+import logging
+
+
+_LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
 async def async_setup_entry(hass, entry, async_add_devices):
@@ -23,8 +27,8 @@ class IkeaObegransadLedSensor(IkeaObegransadLedEntity):
 
     @property
     def state(self):
-        """Return the state of the sensor."""
-        return self.coordinator.data.get("body")
+        """Return the state."""
+        return self.coordinator.data.get("brightness", 0)
 
     @property
     def icon(self):

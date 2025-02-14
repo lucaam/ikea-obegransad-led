@@ -7,6 +7,10 @@ from .const import BINARY_SENSOR_DEVICE_CLASS
 from .const import DEFAULT_NAME
 from .const import DOMAIN
 from .entity import IkeaObegransadLedEntity
+import logging
+
+
+_LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
 async def async_setup_entry(hass, entry, async_add_devices):
@@ -30,5 +34,5 @@ class IkeaObegransadLedBinarySensor(IkeaObegransadLedEntity, BinarySensorEntity)
 
     @property
     def is_on(self):
-        """Return true if the binary_sensor is on."""
-        return self.coordinator.data.get("title", "") == "foo"
+        """Return true if the device is connected."""
+        return self.coordinator.last_update_success
