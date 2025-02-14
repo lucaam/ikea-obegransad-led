@@ -16,6 +16,9 @@ class IkeaObegransadLedApiClient:
 
     def __init__(self, session, host):
         """Inizializza la connessione con l'host del dispositivo."""
+        _LOGGER.debug(
+            "Initializing API client for IKEA OBEGRÄNSAD Led."
+        )  # Log client init
         self.session = session
         self.host = host
         self.base_url = f"http://{host}/api"  # Usa l'host configurato
@@ -23,14 +26,37 @@ class IkeaObegransadLedApiClient:
     async def _request(self, method, endpoint, params=None):
         """Effettua una richiesta HTTP generica."""
         url = f"{self.base_url}/{endpoint}"
+        _LOGGER.debug(
+            "Making %s request to %s with params: %s", method, url, params
+        )  # Log request details
         try:
-            async with self.session.request(method, url, params=params) as response:
+            async with self.session.request(
+                method, url, params=params, timeout=TIMEOUT
+            ) as response:  # Add timeout
+                _LOGGER.debug(
+                    "Received response with status: %s from %s", response.status, url
+                )  # Log response status
                 if response.status == 200:
-                    return await response.json()
-                _LOGGER.error("Errore API %s: %s", url, response.status)
+                    try:
+                        json_data = await response.json()
+                        _LOGGER.debug(
+                            "Successfully parsed JSON response: %s", json_data
+                        )  # Log JSON data
+                        return json_data
+                    except (
+                        aiohttp.ContentTypeError
+                    ) as e:  # Handle potential JSON decode errors
+                        _LOGGER.error("Invalid JSON response from %s: %s", url, e)
+                        return None
+                else:
+                    text = await response.text()  # Get error text
+                    _LOGGER.error(
+                        "API Error %s from %s: %s", response.status, url, text
+                    )  # Log error details
+                    return None
         except aiohttp.ClientError as err:
-            _LOGGER.error("Errore di connessione API: %s", err)
-        return None
+            _LOGGER.error("API connection error: %s", err)  # Log connection errors
+            return None  # Important: Return None on error
 
     async def get_info(self):
         """Recupera informazioni sul dispositivo."""
