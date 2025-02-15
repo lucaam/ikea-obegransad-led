@@ -46,4 +46,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 * [💡 IKEA OBEGRÄNSAD LED Wall Lamp](https://www.ikea.com/it/it/p/obegraensad-lampada-da-parete-a-led-nero-00526248/)
 * [🐛 ph1p's ikea-led-obegraensad Project](https://github.com/ph1p/ikea-led-obegraensad)
-* [🤖 ChatGTP](https://chatgpt.com/)
+* [🤖 ChatGPT](https://chatgpt.com/)
