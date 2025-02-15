@@ -1,3 +1,9 @@
+<p>
+  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/lucaam/ikea-obegransad-led">
+  <img alt="GitHub License" src="https://img.shields.io/github/license/lucaam/ikea-obegransad-led">
+  <a href="https://github.com/lucaam/ikea-obegransad-led/issues"><img alt="GitHub Issues" src="https://img.shields.io/github/issues/lucaam/ikea-obegransad-led"></a>
+</p>
+
 # IKEA OBEGRÄNSAD Led
 
 Home Assistant addon to control IKEA OBEGRÄNSAD Wall Lamp hacked with [ph1p/ikea-led-obegraensad](https://github.com/ph1p/ikea-led-obegraensad) and a ESP32 device.
@@ -9,12 +15,6 @@ Home Assistant addon to control IKEA OBEGRÄNSAD Wall Lamp hacked with [ph1p/ike
 - [ ] Control through local API*
 
 <sup>*🚧 Work in progress</sup>
-
-<p align="center">
-  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/lucaam/ikea-obegransad-led">
-  <img alt="GitHub License" src="https://img.shields.io/github/license/lucaam/ikea-obegransad-led">
-  <a href="https://github.com/lucaam/ikea-obegransad-led/issues"><img alt="GitHub Issues" src="https://img.shields.io/github/issues/lucaam/ikea-obegransad-led"></a>
-</p>
 
 ## Installation
 
