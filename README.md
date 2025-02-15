@@ -8,7 +8,7 @@
 
 Home Assistant addon to control IKEA OBEGRÄNSAD Wall Lamp hacked with [ph1p/ikea-led-obegraensad](https://github.com/ph1p/ikea-led-obegraensad) and a ESP32 device.
 
-✨ Features supported:
+###### ✨ Features supported
 
 - [x] Turn the lamp on and off
 - [ ] Adjust the light intensity (brightness)*
