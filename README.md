@@ -4,9 +4,11 @@ Home Assistant addon to control IKEA OBEGRÄNSAD Wall Lamp hacked with [ph1p/ike
 
 ✨ Features supported:
 
-- Turn the lamp on and off
-- Adjust the light intensity (brightness)
-- Control through local API
+- [x] Turn the lamp on and off
+- [ ] Adjust the light intensity (brightness)*
+- [ ] Control through local API*
+
+<sup>*🚧 Work in progress</sup>
 
 <p align="center">
   <img alt="GitHub Release" src="https://img.shields.io/github/v/release/lucaam/ikea-obegransad-led">
