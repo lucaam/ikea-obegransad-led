@@ -20,6 +20,7 @@ categories:
   - title: ":lipstick: Style"
     label: "style"
   - title: ":package: Dependencies"
+    collapse-after: 3
     labels:
       - "dependencies"
       - "build"
