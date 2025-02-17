@@ -1,6 +1,6 @@
 """Light module for Custom Ambilight integration."""
 
-from homeassistant.components.light import LightEntity
+from homeassistant.components.light import ColorMode, LightEntity, LightEntityFeature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -21,27 +21,28 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
         super().__init__(coordinator)
         self.api = coordinator.api
         self.entry = entry
+        self._name = DEFAULT_NAME
+        self._attr_supported_color_modes = {ColorMode.BRIGHTNESS}
+        self._attr_color_mode = ColorMode.BRIGHTNESS
+        self._attr_supported_plugins = LightEntityFeature.EFFECT
+        self._attr_effect_list = self._get_effects()
+        self._active_effect = self._get_effect()
 
     @property
     def device_info(self):
         """Return device information about the device."""
         return {
             "identifiers": {(DOMAIN, self.entry.entry_id)},
-            "name": self.name,
+            "name": self._name,
             "manufacturer": "IKEA",  # Replace with actual manufacturer if known
             "model": "OBEGRÄNSAD LED",  # Replace with actual model if known
             "sw_version": VERSION,  # Replace with actual version if known
         }
 
     @property
-    def name(self):
-        """Return the name of the switch."""
-        return f"{DEFAULT_NAME}"
-
-    @property
     def unique_id(self):
         """Return the unique ID of the entity."""
-        return slugify(f"{DOMAIN}_{self.entry.entry_id}_{self.name}")
+        return slugify(f"{DOMAIN}_{self.entry.entry_id}_{self._name}")
 
     @property
     def icon(self):
@@ -59,12 +60,15 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
         return self.api.get_brightness()
 
     @property
-    def effect_list(self):
+    def effect(self):
+        """Return the current effect."""
+        return self._get_effect()
+
+    def _get_effects(self):
         """Return the list of supported effects."""
         return [plugin["name"] for plugin in self.api.get_plugins.values()]
 
-    @property
-    def effect(self):
+    def _get_effect(self):
         """Return the current effect."""
         return self.api.get_active_plugin()
 
