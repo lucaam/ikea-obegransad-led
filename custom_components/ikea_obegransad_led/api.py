@@ -1,4 +1,4 @@
-"""API Client to interact with IKEA OBEGRÄNSAD Led."""
+"""API Client to interact with IKEA OBEGRÄNSAD LED."""
 
 import logging
 
@@ -12,19 +12,19 @@ HEADERS = {"Content-type": "application/json; charset=UTF-8"}
 
 
 class IkeaObegransadLedApiClient:
-    """API client per controllare la lampada LED via REST."""
+    """API client to control the LED lamp via REST."""
 
     def __init__(self, session, host):
-        """Inizializza la connessione con l'host del dispositivo."""
+        """Initializes the connection with the device host."""
         _LOGGER.debug(
-            "Initializing API client for IKEA OBEGRÄNSAD Led."
+            "Initializing API client for IKEA OBEGRÄNSAD LED."
         )  # Log client init
         self.session = session
         self.host = host
-        self.base_url = f"http://{host}/api"  # Usa l'host configurato
+        self.base_url = f"http://{host}/api"  # Use configured host
 
     async def _request(self, method, endpoint, params=None):
-        """Effettua una richiesta HTTP generica."""
+        """Performs a generic HTTP request."""
         url = f"{self.base_url}/{endpoint}"
         _LOGGER.debug(
             "Making %s request to %s with params: %s", method, url, params
@@ -59,25 +59,49 @@ class IkeaObegransadLedApiClient:
             return None  # Important: Return None on error
 
     async def get_info(self):
-        """Recupera informazioni sul dispositivo."""
+        """Retrieves information about the device."""
         return await self._request("GET", "info")
 
+    async def is_on(self):
+        """Retrieves information about the device."""
+        return self.get_brightness > 0
+
+    async def turn_on(self):
+        """Turns on the device."""
+        return await self.set_brightness(255)
+
+    async def turn_off(self):
+        """Turns off the device."""
+        return await self.set_brightness(0)
+
     async def set_plugin(self, plugin_id):
-        """Imposta un plugin attivo tramite ID."""
+        """Sets an active plugin by ID."""
         return await self._request("PATCH", "plugin", {"id": plugin_id})
 
+    async def get_plugins(self):
+        """Retrieves available plugins."""
+        return await self.get_info().data.get("plugins")
+
+    async def get_active_plugin(self):
+        """Retrieves the currently active plugin."""
+        return await self.get_info().data.get("plugin")
+
     async def set_brightness(self, value):
-        """Imposta la luminosità del display LED."""
+        """Sets the LED display brightness."""
         return await self._request("PATCH", "brightness", {"value": value})
 
+    async def get_brightness(self):
+        """Retrieves the LED display brightness."""
+        return await self.get_info().data.get("brightness")
+
     async def get_display_data(self):
-        """Recupera i dati attuali del display LED."""
+        """Retrieves the current LED display data."""
         return await self._request("GET", "data")
 
     async def send_message(
         self, text=None, graph=None, repeat=1, delay=50, miny=None, maxy=None, id=None
     ):
-        """Send message to display."""
+        """Sends a message to the display."""
         params = {
             "text": text,
             "repeat": repeat,
@@ -94,5 +118,5 @@ class IkeaObegransadLedApiClient:
         return await self._request("GET", "message", params=params)
 
     async def remove_message(self, message_id):
-        """Rimuove un messaggio dal display LED."""
+        """Removes a message from the LED display."""
         return await self._request("GET", "removemessage", {"id": message_id})

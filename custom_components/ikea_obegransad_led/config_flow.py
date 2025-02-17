@@ -26,7 +26,7 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             host = user_input[CONF_HOST]
-            valid = await self._test_credentials(host)
+            valid = await self._test_host(host)
             if valid:
                 return self.async_create_entry(title=host, data=user_input)
             else:
@@ -44,13 +44,13 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             errors=self._errors,
         )
 
-    async def _test_credentials(self, host):
+    async def _test_host(self, host):
         """Return true if the host is valid."""
         try:
             _LOGGER.debug("Testing connection to %s", host)
             session = async_create_clientsession(self.hass)
             client = IkeaObegransadLedApiClient(session, host)
-            response = await client.get_info()  # Corrected method name
+            response = await client.get_info()
 
             if response:
                 _LOGGER.debug("Received valid response: %s", response)

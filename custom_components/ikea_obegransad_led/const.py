@@ -12,17 +12,13 @@ ATTRIBUTION = "Data provided by IKEA OBEGRÄNSAD API for Wall Light with LED Mat
 ISSUE_URL = "https://github.com/lucaam/ikea-obegransad-led/issues"
 
 # Icons
-ICON = "mdi:wall-sconce"
+ICON = "mdi:wall"
 
 # Device classes
-BINARY_SENSOR_DEVICE_CLASS = "connectivity"
 
 # Platforms
-BINARY_SENSOR = "binary_sensor"
-SENSOR = "sensor"
-SWITCH = "switch"
 LIGHT = "light"
-PLATFORMS = [BINARY_SENSOR, SENSOR, SWITCH]
+PLATFORMS = [LIGHT]
 
 SCAN_INTERVAL = timedelta(seconds=60)
 
