@@ -25,8 +25,9 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
         self._attr_supported_color_modes = {ColorMode.BRIGHTNESS}
         self._attr_color_mode = ColorMode.BRIGHTNESS
         self._attr_supported_plugins = LightEntityFeature.EFFECT
-        self._attr_effect_list = self._get_effects()
-        self._active_effect = self._get_effect()
+        self._attr_effect_list = None
+        self._active_effect = None
+        self._brightness = 0  # Luminosità iniziale (0 significa spento)
 
     @property
     def device_info(self):
@@ -52,25 +53,39 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
     @property
     def is_on(self):
         """Return true if the light is on."""
-        return self.api.is_on()
+        return self._brightness > 0
 
     @property
-    def brightness(self):
+    def brightness(self) -> int:
         """Return the brightness of the light."""
-        return self.api.get_brightness()
+        return self._brightness
+
+    @brightness.setter
+    async def brightness(self, value: int) -> None:
+        """Set the brightness of the light."""
+        if value < 0 or value > 255:
+            raise ValueError("Brightness must be between 0 and 255")
+        self._brightness = value
+        await self._set_brightness(value)
+
+    async def _set_brightness(self, value: int) -> None:
+        """Send the brightness level to the physical light."""
+        await self.api.set_brightness(value)
 
     @property
     def effect(self):
         """Return the current effect."""
         return self._get_effect()
 
-    def _get_effects(self):
+    async def _get_effects(self):
         """Return the list of supported effects."""
-        return [plugin["name"] for plugin in (await self.api.get_plugins()).values()]
+        plugins = await self.api.get_plugins()
+        return [plugin["name"] for plugin in plugins.values()]
 
-    def _get_effect(self):
+    async def _get_effect(self):
         """Return the current effect."""
-        return self.api.get_active_plugin()
+        active_plugin = await self.api.get_active_plugin()
+        return active_plugin
 
     async def async_turn_on(self):
         """Turn the light on."""
@@ -86,11 +101,15 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
 
 
 async def async_setup_entry(
-    hass: HomeAssistant, entry: ConfigEntry, async_add_entities
+    self, hass: HomeAssistant, entry: ConfigEntry, async_add_entities
 ):
     """Setup switch platform."""
     _LOGGER.debug(
         "Setting up switch platform for IKEA OBEGRÄNSAD Led."
     )  # Log setup start
+
+    self._attr_effect_list = await self._get_effects()
+    self._active_effect = await self._get_effect()
+
     coordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_entities([IkeaObegransadLedLight(coordinator, entry)])
