@@ -27,7 +27,7 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
         """Return device information about the device."""
         return {
             "identifiers": {(DOMAIN, self.entry.entry_id)},
-            "name": self._name,
+            "name": self.name,
             "manufacturer": "IKEA",  # Replace with actual manufacturer if known
             "model": "OBEGRÄNSAD LED",  # Replace with actual model if known
             "sw_version": VERSION,  # Replace with actual version if known
@@ -41,7 +41,7 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
     @property
     def unique_id(self):
         """Return the unique ID of the entity."""
-        return slugify(f"{DOMAIN}_{self.entry.entry_id}_{self._name}")
+        return slugify(f"{DOMAIN}_{self.entry.entry_id}_{self.name}")
 
     @property
     def icon(self):
