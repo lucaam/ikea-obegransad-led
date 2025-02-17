@@ -7,6 +7,8 @@ from homeassistant.components.light import (
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from homeassistant.util import slugify
+
 import logging
 
 from .const import DOMAIN, DEFAULT_NAME, VERSION, ICON
@@ -24,9 +26,6 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
         self.entry = entry
         self._name = DEFAULT_NAME
         self._attr_supported_plugins = LightEntityFeature.EFFECT
-        self._attr_unique_id = (
-            entry.entry_id
-        )  # Use the config entry ID as the unique ID
 
     @property
     def device_info(self):
@@ -43,6 +42,11 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
     def name(self):
         """Return the name of the switch."""
         return f"{DEFAULT_NAME}"
+
+    @property
+    def unique_id(self):
+        """Return the unique ID of the entity."""
+        return slugify(f"{DOMAIN}_{self.entry.entry_id}_{self._name}")
 
     @property
     def icon(self):
