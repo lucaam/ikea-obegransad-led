@@ -66,7 +66,7 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
 
     def _get_effects(self):
         """Return the list of supported effects."""
-        return [plugin["name"] for plugin in self.api.get_plugins.values()]
+        return [plugin["name"] for plugin in (await self.api.get_plugins()).values()]
 
     def _get_effect(self):
         """Return the current effect."""
