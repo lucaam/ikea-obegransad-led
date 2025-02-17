@@ -25,9 +25,26 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
         self._attr_supported_color_modes = {ColorMode.BRIGHTNESS}
         self._attr_color_mode = ColorMode.BRIGHTNESS
         self._attr_supported_plugins = LightEntityFeature.EFFECT
-        self._attr_effect_list = None
-        self._active_effect = None
-        self._brightness = 0  # Luminosità iniziale (0 significa spento)
+        self._attr_effect_list = [
+            "Draw",
+            "Breakout",
+            "Snake",
+            "GameOfLife",
+            "Stars",
+            "Lines",
+            "Circle",
+            "Rain",
+            "Firework",
+            "Big Clock",
+            "Clock",
+            "PongClock",
+            "Ticking Clock",
+            "Weather",
+            "Animation",
+            "DDP",
+        ]
+        self._active_effect = coordinator.data.get("plugin")
+        self._brightness = coordinator.data.get("brightness")
 
     @property
     def device_info(self):
@@ -43,7 +60,7 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
     @property
     def unique_id(self):
         """Return the unique ID of the entity."""
-        return slugify(f"{DOMAIN}_{self.entry.entry_id}_{self._name}")
+        return slugify(f"{self._name}")
 
     @property
     def icon(self):
