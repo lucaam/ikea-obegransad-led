@@ -1,9 +1,6 @@
 """Light module for Custom Ambilight integration."""
 
-from homeassistant.components.light import (
-    LightEntity,
-    LightEntityFeature,
-)
+from homeassistant.components.light import LightEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -24,8 +21,6 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
         super().__init__(coordinator)
         self.api = coordinator.api
         self.entry = entry
-        self._name = DEFAULT_NAME
-        self._attr_supported_plugins = LightEntityFeature.EFFECT
 
     @property
     def device_info(self):
@@ -64,13 +59,13 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
         return self.api.get_brightness()
 
     @property
-    def plugins_list(self):
-        """Return the list of available plugins."""
+    def effect_list(self):
+        """Return the list of supported effects."""
         return [plugin["name"] for plugin in self.api.get_plugins.values()]
 
     @property
-    def active_plugin(self):
-        """Return the current active plugin."""
+    def effect(self):
+        """Return the current effect."""
         return self.api.get_active_plugin()
 
     async def async_turn_on(self):
@@ -94,4 +89,4 @@ async def async_setup_entry(
         "Setting up switch platform for IKEA OBEGRÄNSAD Led."
     )  # Log setup start
     coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([IkeaObegransadLedLight(coordinator, entry.entry_id)])
+    async_add_entities([IkeaObegransadLedLight(coordinator, entry)])
