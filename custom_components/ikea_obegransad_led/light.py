@@ -101,15 +101,11 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
 
 
 async def async_setup_entry(
-    self, hass: HomeAssistant, entry: ConfigEntry, async_add_entities
+    hass: HomeAssistant, entry: ConfigEntry, async_add_entities
 ):
-    """Setup switch platform."""
-    _LOGGER.debug(
-        "Setting up switch platform for IKEA OBEGRÄNSAD Led."
-    )  # Log setup start
-
-    self._attr_effect_list = await self._get_effects()
-    self._active_effect = await self._get_effect()
-
+    """Setup light platform."""
+    _LOGGER.debug("Setting up light platform for IKEA OBEGRÄNSAD Led.")
+    # Ottieni il coordinator
     coordinator = hass.data[DOMAIN][entry.entry_id]
+    # Aggiungi le entità alla piattaforma
     async_add_entities([IkeaObegransadLedLight(coordinator, entry)])
