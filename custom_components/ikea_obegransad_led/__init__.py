@@ -1,28 +1,57 @@
-"""Custom integration to integrate IKEA OBEGRÄNSAD Led with Home Assistant."""
+"""
+Home Assistant integration for IKEA OBEGRÄNSAD LED.
 
-from datetime import timedelta
+This integration allows control of the IKEA OBEGRÄNSAD device through Home Assistant.
+It provides functionality to:
+- Set up the integration
+- Manage configuration entries
+- Update device state and information
+- Control effects and brightness
+- Monitor device status
+
+The integration uses a data coordinator to manage state updates and communication
+with the device through its API client.
+"""
+
 import logging
+from datetime import timedelta
+from typing import Any
+
 import aiohttp
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .const import DOMAIN, PLATFORMS, CONF_SCAN_INTERVAL, CONF_HOST
 from .api import IkeaObegransadLedApiClient
+from .const import CONF_HOST, CONF_SCAN_INTERVAL, DOMAIN, PLATFORMS
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
 
-async def async_setup(hass: HomeAssistant, config: dict):
+async def async_setup(hass: HomeAssistant) -> bool:
     """Set up the integration."""
     _LOGGER.debug("Setting up IKEA OBEGRÄNSAD Led integration.")  # Log setup start
     hass.data.setdefault(DOMAIN, {})
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    """Set up from a config entry."""
+async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+    """
+    Set up the IKEA OBEGRÄNSAD Led integration from a config entry.
+
+    This function initializes the integration by setting up the necessary
+    components and fetching initial data. It logs the setup process and
+    handles any errors that occur during the initial data fetch.
+
+    Args:
+        hass (HomeAssistant): The HomeAssistant instance.
+        entry (ConfigEntry): The configuration entry containing setup data.
+
+    Returns:
+        bool: True if the setup was successful, False otherwise.
+
+    """
     _LOGGER.debug(
         "Setting up config entry for IKEA OBEGRÄNSAD Led with host: %s",
         entry.data[CONF_HOST],
@@ -45,14 +74,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         hass.data[DOMAIN][entry.entry_id] = coordinator
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
         return True
-    else:
-        _LOGGER.error(
-            "Failed to set up entry because initial refresh failed."
-        )  # Log failure
-        return False  # Indicate setup failure
+    _LOGGER.error(
+        "Failed to set up entry because initial refresh failed."
+    )  # Log failure
+    return False  # Indicate setup failure
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
+async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Unload a config entry."""
     _LOGGER.debug(
         "Unloading config entry for IKEA OBEGRÄNSAD Led with entry ID: %s",
@@ -70,7 +98,21 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
 class IkeaObegransadLedDataUpdateCoordinator(DataUpdateCoordinator):
     """Data coordinator for IKEA OBEGRÄNSAD Led."""
 
-    def __init__(self, hass, client, update_method):
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        client: IkeaObegransadLedApiClient,
+        update_method: callable,
+    ) -> None:
+        """
+        Initialize the coordinator.
+
+        Args:
+            hass: The Home Assistant instance.
+            client: The IKEA OBEGRÄNSAD Led API client.
+            update_method: The method to call for updates.
+
+        """
         super().__init__(
             hass,
             _LOGGER,
@@ -86,13 +128,23 @@ class IkeaObegransadLedDataUpdateCoordinator(DataUpdateCoordinator):
         self.active_effect_name = None
         _LOGGER.debug("IkeaObegransadLedDataUpdateCoordinator initialized.")
 
-    async def _async_update_data(self):
-        """Fetch data from the API."""
+    async def _async_update_data(self) -> dict[str, Any] | None:
+        """
+        Fetch data from the IKEA OBEGRÄNSAD Led API and update internal state.
+
+        This method retrieves data from the API, updates the plugin map, brightness,
+        and active plugin information. It logs the updated state and handles any
+        connection errors.
+
+        Returns:
+            Optional[Dict[str, Any]]: The data retrieved from the API, or None
+            if an error occurs or no data is returned.
+
+        """
         _LOGGER.debug("Fetching data from IKEA OBEGRÄNSAD Led API.")
         try:
             data = await self.client.get_info()
             if data:
-
                 self.plugin_map = {
                     plugin["name"]: plugin["id"] for plugin in data.get("plugins", [])
                 }
@@ -106,8 +158,8 @@ class IkeaObegransadLedDataUpdateCoordinator(DataUpdateCoordinator):
                 self.active_effect_name = next(
                     (
                         name
-                        for name, id in self.plugin_map.items()
-                        if id == self.active_plugin_id
+                        for name, plugin_id in self.plugin_map.items()
+                        if plugin_id == self.active_plugin_id
                     ),
                     None,
                 )
@@ -120,9 +172,7 @@ class IkeaObegransadLedDataUpdateCoordinator(DataUpdateCoordinator):
                 )
 
                 return data
-            else:
-                _LOGGER.warning("API returned no data during update.")
-                return None
-        except aiohttp.ClientError as err:
-            _LOGGER.error("API connection error during update: %s", err)
+
+        except aiohttp.ClientError:
+            _LOGGER.exception("API connection error during update")
             return None

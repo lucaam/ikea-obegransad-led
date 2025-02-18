@@ -50,7 +50,7 @@ STARTUP_MESSAGE = f"""
 -------------------------------------------------------------------
 {NAME}
 Version: {VERSION}
-This custom integration allows you to control your IKEA OBEGRÄNSAD LED wall light with a matrix of LEDs.
+This custom integration allows you to control your IKEA OBEGRÄNSAD LED wall light.
 You can control the brightness, switch plugins, and display custom messages.
 Enjoy using your smart home setup!
 
