@@ -1,0 +1,13 @@
+{
+  "domain": "ikea_obegransad_led",
+  "name": "IKEA OBEGRÄNSAD Led",
+  "codeowners": ["@lucaam"],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/lucaam/ikea-obegransad-led",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/lucaam/ikea-obegransad-led/issues",
+  "requirements": ["aiohttp"],
+  "version": "0.0.1"
+}

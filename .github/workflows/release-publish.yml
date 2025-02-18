@@ -1,0 +1,29 @@
+name: Release Publisher
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+
+jobs:
+  publish_release:
+    if: github.repository == 'lucaam/ikea-obegransad-led'
+    permissions:
+      contents: write
+      pull-requests: read
+    runs-on: ubuntu-latest
+    steps:
+      - uses: release-drafter/release-drafter@v6.1.0
+        with:
+          disable-autolabeler: true
+          # Override the Release name/tag/version with the actual tag name
+          name: ${{ github.event.release.tag_name }}
+          tag: ${{ github.event.release.tag_name }}
+          version: ${{ github.event.release.tag_name }}
+          # Publish the Release
+          publish: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
