@@ -19,9 +19,6 @@ env/
 # Caches
 *.log
 *.pot
-*.pyc
-*.pyo
-*.pyd
 *.db
 
 # Home Assistant build artifacts
@@ -47,9 +44,11 @@ auth/
 # Cookiecutter generated files
 cookiecutter.json
 
+# Specific config files
 /config
 config2/*
 
+# Tests and test configuration
 tests/testing_config/deps
 tests/testing_config/home-assistant.log*
 
@@ -59,6 +58,7 @@ data/
 
 # Translations
 homeassistant/components/*/translations
+*.mo
 
 # Hide sublime text stuff
 *.sublime-project
@@ -77,39 +77,9 @@ Icon
 .idea
 *.iml
 
-# pytest
+# pytest and related files
 .pytest_cache
 .cache
-
-# GITHUB Proposed Python stuff:
-*.py[cod]
-__pycache__
-
-# C extensions
-*.so
-
-# Packages
-*.egg
-*.egg-info
-dist
-build
-eggs
-.eggs
-parts
-bin
-var
-sdist
-develop-eggs
-.installed.cfg
-lib
-lib64
-pip-wheel-metadata
-
-# Logs
-*.log
-pip-log.txt
-
-# Unit test / coverage reports
 .coverage
 coverage.xml
 nosetests.xml
@@ -119,38 +89,50 @@ test-results.xml
 test-output.xml
 pytest-*.txt
 
-# Translations
-*.mo
+# C extensions
+*.so
+
+# Packages and Python-related artifacts
+*.egg
+*.egg-info
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+pip-wheel-metadata
+
+# Logs
+pip-log.txt
 
 # Mr Developer
 .mr.developer.cfg
 .project
 .pydevproject
 
+# Python version files
 .python-version
 .tool-versions
 
-# emacs auto backups
+# Emacs auto backups
 *~
 *#
 *.orig
 
-# venv stuff
+# venv and related files
 pyvenv.cfg
 pip-selfcheck.json
-venv
-.venv
 Pipfile*
 share/*
 /Scripts/
 
-# vimmy stuff
+# vim temporary files
 *.swp
 *.swo
 tags
 ctags.tmp
 
-# vagrant stuff
+# Vagrant stuff
 virtualization/vagrant/setup_done
 virtualization/vagrant/.vagrant
 virtualization/vagrant/config
@@ -160,7 +142,6 @@ virtualization/vagrant/config
 !.vscode/cSpell.json
 !.vscode/extensions.json
 !.vscode/tasks.json
-.env
 
 # Windows Explorer
 desktop.ini
@@ -175,14 +156,26 @@ desktop.ini
 # Secrets
 .lokalise_token
 
-# monkeytype
+# Monkeytype
 monkeytype.sqlite3
 
-# This is left behind by Azure Restore Cache
+# Azure Restore Cache
 tmp_cache
 
-# python-language-server / Rope
+# Python Language Server / Rope
 .ropeproject
 
 # Will be created from script/split_tests.py
 pytest_buckets.txt
+
+# Artifacts
+*.egg-info
+*/build/*
+*/dist/*
+
+# Miscellaneous
+.ruff_cache
+
+# Home Assistant configuration
+config/*
+!config/configuration.yaml
