@@ -25,20 +25,6 @@ repos:
         args:
           - --config
           - .ruff.toml
-          - --select
-          - ALL
-          - --ignore
-          - ANN101
-          - --ignore
-          - ANN401
-          - --ignore
-          - D203
-          - --ignore
-          - D212
-          - --ignore
-          - COM812
-          - --ignore
-          - ISC001
 
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v2.2.1
