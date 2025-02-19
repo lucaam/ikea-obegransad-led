@@ -1,0 +1,28 @@
+send_message:
+  name: "Send Message to IKEA OBEGRÄNSAD LED"
+  description: "Send a message to be displayed on the LED lamp"
+  fields:
+    message:
+      description: "Text to display on the lamp"
+      example: "Hello, world!"
+      required: true
+      selector:
+        text:
+    repeat:
+      description: "Number of times to repeat the message"
+      example: 1
+      required: false
+      selector:
+        number:
+          min: 1
+          max: 10
+          unit_of_measurement: "times"
+    delay:
+      description: "Delay between frames (in ms)"
+      example: 70
+      required: false
+      selector:
+        number:
+          min: 10
+          max: 200
+          unit_of_measurement: "ms"

@@ -23,7 +23,7 @@ from homeassistant import config_entries
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .api import IkeaObegransadLedApiClient
-from .const import CONF_HOST, DOMAIN
+from .const import CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT, CONF_HOST, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -61,10 +61,17 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             host = user_input[CONF_HOST]
-            valid = await self._test_host(host)
-            if valid:
-                return self.async_create_entry(title=host, data=user_input)
-            self._errors["base"] = "cannot_connect"
+            effect = user_input[CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT]
+            valid_host = await self._test_host(host)
+            valid_effect = await self._verify_effect_exists(host, effect)
+            if valid_host:
+                if valid_effect:
+                    return self.async_create_entry(title=host, data=user_input)
+                self._errors["base"] = "The provided effect does not exists"
+            else:
+                self._errors["base"] = (
+                    "Cannot connect to the lamp using the provided host"
+                )
 
             return await self._show_config_form(user_input)
 
@@ -84,7 +91,13 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(
-                {vol.Required(CONF_HOST, default=DEFAULT_HOST): str}
+                {
+                    vol.Required(CONF_HOST, default=DEFAULT_HOST): str,
+                    vol.Required(
+                        CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT,
+                        default=CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT,
+                    ): str,
+                },
             ),
             errors=self._errors,
         )
@@ -118,6 +131,25 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 _LOGGER.debug("Received valid response: %s", response)
                 return True
             _LOGGER.warning("Invalid response received: %s", response)
+
+        except aiohttp.ClientError:
+            _LOGGER.exception("Connection error")
+            return False
+        except Exception:
+            _LOGGER.exception("Unexpected error")
+            return False
+
+    async def _verify_effect_exists(self, host: str, effect: str) -> bool:
+        try:
+            _LOGGER.debug("Testing connection to %s", host)
+            session = async_create_clientsession(self.hass)
+            client = IkeaObegransadLedApiClient(session, host)
+            response = await client.get_plugin_id_by_name(effect)
+
+            if response:
+                _LOGGER.debug("Effect name %s exists: %s", effect, response)
+                return True
+            _LOGGER.warning("Effect name %s does not exist: %s", effect, response)
 
         except aiohttp.ClientError:
             _LOGGER.exception("Connection error")

@@ -41,7 +41,7 @@ DEFAULT_EFFECTS = [
 # Configuration and options
 CONF_HOST = "Hostname or IP"
 CONF_SCAN_INTERVAL = 30
-
+CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT = "DDP"
 # Defaults
 DEFAULT_NAME = "Ikea OBEGRÄNSAD LED Wall Light"
 
