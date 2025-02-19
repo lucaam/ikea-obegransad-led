@@ -3,27 +3,37 @@
     "step": {
       "user": {
         "title": "IKEA OBEGRÄNSAD Led",
-        "description": "Hvis du trenger hjep til konfigurasjon ta en titt her: https://github.com/lucaam/ikea-obegransad-led",
+        "description": "Hvis du trenger hjelp med konfigurasjonen, se her: https://github.com/lucaam/ikea-obegransad-led",
         "data": {
-          "username": "Brukernavn",
-          "password": "Passord"
+          "host": "Vertsnavn eller IP-adresse",
+          "default_message_background_effect": "Animasjon som skal settes før meldingen vises"
         }
       }
     },
-    "error": {
-      "auth": "Brukernavn/Passord er feil."
+    "errors": {
+      "connection_error": "Kan ikke koble til lampen.",
+      "effect_does_not_exist": "Den spesifiserte effekten finnes ikke."
     },
     "abort": {
-      "single_instance_allowed": "Denne integrasjonen kan kun konfigureres en gang."
+      "single_instance_allowed": "Kun én instans er tillatt."
     }
   },
-  "options": {
-    "step": {
-      "user": {
-        "data": {
-          "binary_sensor": "Binær sensor aktivert",
-          "sensor": "Sensor aktivert",
-          "switch": "Bryter aktivert"
+  "services": {
+    "send_message": {
+      "name": "Send tilpasset melding",
+      "description": "Send en tilpasset tekstmelding til lampen.",
+      "fields": {
+        "message": {
+          "name": "Melding",
+          "description": "Tekstmeldingen som skal vises på lampen."
+        },
+        "repeat": {
+          "name": "Gjenta",
+          "description": "Antall ganger meldingen skal gjentas."
+        },
+        "delay": {
+          "name": "Forsinkelse",
+          "description": "Forsinkelse i sekunder mellom hver ramme av meldingen."
         }
       }
     }

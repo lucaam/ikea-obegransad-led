@@ -3,27 +3,37 @@
     "step": {
       "user": {
         "title": "IKEA OBEGRÄNSAD Led",
-        "description": "Si vous avez besoin d'aide pour la configuration, regardez ici: https://github.com/lucaam/ikea-obegransad-led",
+        "description": "Si vous avez besoin d'aide pour la configuration, consultez ici : https://github.com/lucaam/ikea-obegransad-led",
         "data": {
-          "username": "Identifiant",
-          "password": "Mot de Passe"
+          "host": "Nom d'hôte ou adresse IP",
+          "default_message_background_effect": "Animation à définir avant l'affichage du message"
         }
       }
     },
-    "error": {
-      "auth": "Identifiant ou mot de passe erroné."
+    "errors": {
+      "connection_error": "Impossible de se connecter à la lampe.",
+      "effect_does_not_exist": "L'effet spécifié n'existe pas."
     },
     "abort": {
       "single_instance_allowed": "Une seule instance est autorisée."
     }
   },
-  "options": {
-    "step": {
-      "user": {
-        "data": {
-          "binary_sensor": "Capteur binaire activé",
-          "sensor": "Capteur activé",
-          "switch": "Interrupteur activé"
+  "services": {
+    "send_message": {
+      "name": "Envoyer un message personnalisé",
+      "description": "Envoyez un message texte personnalisé à la lampe.",
+      "fields": {
+        "message": {
+          "name": "Message",
+          "description": "Le message texte à afficher sur la lampe."
+        },
+        "repeat": {
+          "name": "Répétition",
+          "description": "Nombre de fois où le message sera répété."
+        },
+        "delay": {
+          "name": "Délai",
+          "description": "Délai en secondes entre chaque image du message."
         }
       }
     }

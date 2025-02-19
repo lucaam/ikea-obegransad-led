@@ -5,25 +5,35 @@
         "title": "IKEA OBEGRÄNSAD Led",
         "description": "If you need help with the configuration have a look here: https://github.com/lucaam/ikea-obegransad-led",
         "data": {
-          "username": "Username",
-          "password": "Password"
+          "host": "Hostname or IP address",
+          "default_message_background_effect": "Animation to set before the message is displayed"
         }
       }
     },
-    "error": {
-      "auth": "Username/Password is wrong."
+    "errors": {
+      "connection_error": "Cannot connect to the lamp.",
+      "effect_does_not_exist": "The specified effect does not exist."
     },
     "abort": {
       "single_instance_allowed": "Only a single instance is allowed."
     }
   },
-  "options": {
-    "step": {
-      "user": {
-        "data": {
-          "binary_sensor": "Binary sensor enabled",
-          "sensor": "Sensor enabled",
-          "switch": "Switch enabled"
+  "services": {
+    "send_message": {
+      "name": "Send custom message",
+      "description": "Send a custom text message to the lamp.",
+      "fields": {
+        "message": {
+          "name": "Message",
+          "description": "The text message to display on the lamp."
+        },
+        "repeat": {
+          "name": "Repeat",
+          "description": "Number of times to repeat the message."
+        },
+        "delay": {
+          "name": "Delay",
+          "description": "Delay in seconds between each frame of the message."
         }
       }
     }

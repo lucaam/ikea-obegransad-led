@@ -67,11 +67,9 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             if valid_host:
                 if valid_effect:
                     return self.async_create_entry(title=host, data=user_input)
-                self._errors["base"] = "The provided effect does not exists"
+                self._errors["base"] = "effect_does_not_exist"
             else:
-                self._errors["base"] = (
-                    "Cannot connect to the lamp using the provided host"
-                )
+                self._errors["base"] = "cannot_connect"
 
             return await self._show_config_form(user_input)
 
