@@ -1,0 +1,41 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "IKEA OBEGRÄNSAD Led",
+        "description": "Se hai bisogno di aiuto con la configurazione, consulta qui: https://github.com/lucaam/ikea-obegransad-led",
+        "data": {
+          "host": "Nome host o indirizzo IP",
+          "default_message_background_effect": "Animazione da impostare prima della visualizzazione del messaggio"
+        }
+      }
+    },
+    "errors": {
+      "connection_error": "Impossibile connettersi alla lampada.",
+      "effect_does_not_exist": "L'effetto specificato non esiste."
+    },
+    "abort": {
+      "single_instance_allowed": "È consentita solo un'istanza."
+    }
+  },
+  "services": {
+    "send_message": {
+      "name": "Invia messaggio personalizzato",
+      "description": "Invia un messaggio di testo personalizzato alla lampada.",
+      "fields": {
+        "message": {
+          "name": "Messaggio",
+          "description": "Il messaggio di testo da visualizzare sulla lampada."
+        },
+        "repeat": {
+          "name": "Ripetizioni",
+          "description": "Numero di volte in cui ripetere il messaggio."
+        },
+        "delay": {
+          "name": "Ritardo",
+          "description": "Ritardo in secondi tra ogni fotogramma del messaggio."
+        }
+      }
+    }
+  }
+}
