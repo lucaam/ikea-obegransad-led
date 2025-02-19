@@ -10,7 +10,7 @@
         }
       }
     },
-    "errors": {
+    "error": {
       "connection_error": "Impossible de se connecter à la lampe.",
       "effect_does_not_exist": "L'effet spécifié n'existe pas."
     },
