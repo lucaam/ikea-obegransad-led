@@ -95,15 +95,10 @@ class IkeaObegransadLedApiClient:
                         _LOGGER.debug(
                             "Successfully parsed JSON response: %s", json_data
                         )  # Log JSON data
-                        return json_data
+                        return json_data  # noqa: TRY300
                     except (
                         aiohttp.ContentTypeError
                     ):  # Handle potential JSON decode errors
-                        _LOGGER.exception(
-                            "Invalid JSON response from %s, %s", url, json_data
-                        )
-                        return None
-                    else:
                         _LOGGER.exception(
                             "Invalid JSON response from %s, %s", url, json_data
                         )
@@ -149,6 +144,27 @@ class IkeaObegransadLedApiClient:
         response = await self._request("PATCH", "plugin", {"id": plugin_id})
         _LOGGER.debug("Plugin set response: %s", response)
         return response
+
+    async def set_plugin_by_name(self, effect_name: str) -> dict[str, Any] | None:
+        """Set an active plugin by name."""
+        plugin_id = await self.get_plugin_id_by_name(effect_name)
+        if plugin_id:
+            _LOGGER.debug("Setting plugin with ID: %s", plugin_id)
+            response = await self._request("PATCH", "plugin", {"id": plugin_id})
+            _LOGGER.debug("Plugin set response: %s", response)
+            return response
+        return None
+
+    async def get_plugin_id_by_name(self, effect_name: str) -> int | None:
+        """Set an active plugin by name."""
+        plugins = await self.get_plugins()  # Fetch all plugins
+        for plugin in plugins:
+            if (
+                plugin["name"].lower() == effect_name.lower()
+            ):  # Case-insensitive comparison
+                return plugin["id"]
+        _LOGGER.warning("Plugin with name '%s' not found.", effect_name)
+        return None
 
     async def get_plugins(self) -> list[dict[str, Any]]:
         """Retrieve available plugins."""
