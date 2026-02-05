@@ -2,38 +2,50 @@
   "config": {
     "step": {
       "user": {
-        "title": "IKEA OBEGRÄNSAD Led",
-        "description": "Se hai bisogno di aiuto con la configurazione, consulta qui: https://github.com/lucaam/ikea-obegransad-led",
+        "title": "IKEA OBEGRÄNSAD LED",
+        "description": "Configura la tua luce da parete IKEA OBEGRÄNSAD LED. Esempio: {host_example}",
         "data": {
           "host": "Nome host o indirizzo IP",
-          "default_message_background_effect": "Animazione da impostare prima della visualizzazione del messaggio"
+          "default_message_background_effect": "Animazione predefinita per i messaggi"
         }
       }
     },
     "error": {
-      "connection_error": "Impossibile connettersi alla lampada.",
-      "effect_does_not_exist": "L'effetto specificato non esiste."
+      "cannot_connect": "Impossibile connettersi al dispositivo. Verifica il nome host o l'indirizzo IP.",
+      "effect_does_not_exist": "L'effetto di animazione specificato non esiste sul dispositivo.",
+      "unknown": "Si è verificato un errore imprevisto."
     },
     "abort": {
-      "single_instance_allowed": "È consentita solo un'istanza."
+      "already_configured": "Questo dispositivo è già configurato.",
+      "single_instance_allowed": "È consentita una sola istanza per dispositivo."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opzioni IKEA OBEGRÄNSAD LED",
+        "data": {
+          "default_message_background_effect": "Animazione predefinita per i messaggi"
+        }
+      }
     }
   },
   "services": {
     "send_message": {
-      "name": "Invia messaggio personalizzato",
-      "description": "Invia un messaggio di testo personalizzato alla lampada.",
+      "name": "Invia messaggio",
+      "description": "Visualizza un messaggio di testo personalizzato sulla matrice LED.",
       "fields": {
         "message": {
           "name": "Messaggio",
-          "description": "Il messaggio di testo da visualizzare sulla lampada."
+          "description": "Il messaggio di testo da visualizzare."
         },
         "repeat": {
-          "name": "Ripetizioni",
-          "description": "Numero di volte in cui ripetere il messaggio."
+          "name": "Conteggio ripetizioni",
+          "description": "Numero di volte in cui ripetere il messaggio (1-1000)."
         },
         "delay": {
           "name": "Ritardo",
-          "description": "Ritardo in secondi tra ogni fotogramma del messaggio."
+          "description": "Ritardo in millisecondi tra i fotogrammi del messaggio (0-10000)."
         }
       }
     }
