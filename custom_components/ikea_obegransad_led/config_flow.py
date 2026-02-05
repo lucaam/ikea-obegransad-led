@@ -136,9 +136,8 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             if response:
                 _LOGGER.debug("Received valid response: %s", response)
                 return True
-
             _LOGGER.warning("Invalid response received: %s", response)
-            return False
+            return False  # noqa: TRY300
 
         except aiohttp.ClientError:
             _LOGGER.exception("Connection error")
@@ -157,9 +156,8 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             if response:
                 _LOGGER.debug("Effect name %s exists: %s", effect, response)
                 return True
-
             _LOGGER.warning("Effect name %s does not exist: %s", effect, response)
-            return False
+            return False  # noqa: TRY300
 
         except aiohttp.ClientError:
             _LOGGER.exception("Connection error")
