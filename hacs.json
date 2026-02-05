@@ -5,5 +5,7 @@
   "hide_default_branch": true,
   "homeassistant": "2024.12.0",
   "hacs": "2.0.1",
-  "filename": "ikea-obegransad-led.zip"
+  "filename": "ikea-obegransad-led.zip",
+  "category": "integration",
+  "description": "Control your IKEA OBEGRÄNSAD LED wall light with Home Assistant. Adjust brightness, switch effects, and display custom messages."
 }
