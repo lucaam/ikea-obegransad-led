@@ -34,11 +34,11 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     """Config flow for ikea_obegransad_led."""
 
     VERSION = 1
-    CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_PUSH
 
     def __init__(self) -> None:
         """Initialize."""
         self._errors = {}
+        self._host = None
 
     async def async_step_user(self, user_input: dict | None) -> Coroutine:
         """
@@ -60,13 +60,21 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
         self._errors = {}
 
         if user_input is not None:
-            host = user_input[CONF_HOST]
+            host = user_input[CONF_HOST].strip()
             effect = user_input[CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT]
+
+            # Check if already configured
+            await self.async_set_unique_id(host.lower())
+            self._abort_if_unique_id_configured()
+
             valid_host = await self._test_host(host)
-            valid_effect = await self._verify_effect_exists(host, effect)
             if valid_host:
+                valid_effect = await self._verify_effect_exists(host, effect)
                 if valid_effect:
-                    return self.async_create_entry(title=host, data=user_input)
+                    return self.async_create_entry(
+                        title=f"IKEA LED Matrix ({host})",
+                        data=user_input,
+                    )
                 self._errors["base"] = "effect_does_not_exist"
             else:
                 self._errors["base"] = "cannot_connect"
@@ -129,6 +137,7 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 _LOGGER.debug("Received valid response: %s", response)
                 return True
             _LOGGER.warning("Invalid response received: %s", response)
+            return False  # noqa: TRY300
 
         except aiohttp.ClientError:
             _LOGGER.exception("Connection error")
@@ -148,6 +157,7 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                 _LOGGER.debug("Effect name %s exists: %s", effect, response)
                 return True
             _LOGGER.warning("Effect name %s does not exist: %s", effect, response)
+            return False  # noqa: TRY300
 
         except aiohttp.ClientError:
             _LOGGER.exception("Connection error")

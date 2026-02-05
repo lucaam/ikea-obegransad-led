@@ -23,14 +23,14 @@ Constants:
 
 import logging
 from collections.abc import Callable, Coroutine
-from typing import Any
+from typing import Any, ClassVar
 
 from homeassistant.components.light import ColorMode, LightEntity, LightEntityFeature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DEFAULT_EFFECTS, DEFAULT_NAME, DOMAIN, ICON, VERSION
+from .const import CONF_HOST, DEFAULT_EFFECTS, DEFAULT_NAME, DOMAIN, VERSION
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
@@ -38,24 +38,35 @@ _LOGGER: logging.Logger = logging.getLogger(__package__)
 class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
     """Representation of a IKEA OBEGRÄNSAD Led."""
 
+    _attr_has_entity_name = True
+    _attr_supported_color_modes: ClassVar[set[ColorMode]] = {ColorMode.BRIGHTNESS}
+    _attr_color_mode = ColorMode.BRIGHTNESS
+    _attr_supported_features = LightEntityFeature.EFFECT
+
     def __init__(self, coordinator: CoordinatorEntity, entry: ConfigEntry) -> None:
         """Initialize the IKEA OBEGRÄNSAD LED light."""
         super().__init__(coordinator)
         self.entry = entry
         self._name = DEFAULT_NAME
-        self._attr_supported_color_modes = {ColorMode.BRIGHTNESS}
-        self._attr_color_mode = ColorMode.BRIGHTNESS
         self._plugin_map = coordinator.plugin_map
 
-        # Attributi gestiti direttamente da Home Assistant
+        # Set initial state from coordinator
         self._attr_is_on = coordinator.is_on
         self._attr_brightness = coordinator.brightness
         self._attr_effect = coordinator.active_effect_name
-        self._attr_effect_list = DEFAULT_EFFECTS
-        self._attr_supported_color_modes = {ColorMode.BRIGHTNESS}
-        self._attr_color_mode = ColorMode.BRIGHTNESS
-        self._attr_supported_features = LightEntityFeature.EFFECT
+        self._attr_effect_list = (
+            list(coordinator.plugin_map.keys())
+            if coordinator.plugin_map
+            else DEFAULT_EFFECTS
+        )
         self._last_brightness = 0
+
+    @property
+    def icon(self) -> str:
+        """Return the icon based on device state."""
+        if self._attr_is_on:
+            return "mdi:led-strip-variant"
+        return "mdi:led-strip-variant-off"
 
     @property
     def device_info(self) -> dict:
@@ -80,20 +91,15 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
             "identifiers": {(DOMAIN, self.entry.entry_id)},
             "name": self._name,
             "manufacturer": "IKEA",
-            "model": "OBEGRÄNSAD LED",
+            "model": "OBEGRÄNSAD LED Wall Light",
             "sw_version": VERSION,
+            "configuration_url": f"http://{self.entry.data[CONF_HOST]}",
         }
 
     @property
     def unique_id(self) -> str:
         """Return the unique ID of the entity."""
         return self.entry.entry_id
-
-    @property
-    def icon(self) -> str:
-        """Return the icon of this light."""
-        _LOGGER.debug("Returning icon: %s", ICON)
-        return ICON
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the light on."""
