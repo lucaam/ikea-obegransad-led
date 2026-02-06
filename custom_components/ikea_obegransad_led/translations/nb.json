@@ -37,5 +37,72 @@
         }
       }
     }
+  },
+  "entity": {
+    "sensor": {
+      "rotation": {
+        "name": "Rotasjon"
+      },
+      "brightness": {
+        "name": "Lysstyrke"
+      },
+      "active_plugin": {
+        "name": "Aktivt Plugin"
+      },
+      "status": {
+        "name": "Status"
+      },
+      "schedule_count": {
+        "name": "Antall Tidsplaner"
+      },
+      "wifi_signal": {
+        "name": "WiFi-Signal"
+      },
+      "uptime": {
+        "name": "Oppetid"
+      },
+      "free_memory": {
+        "name": "Fri Minne"
+      },
+      "ip_address": {
+        "name": "IP-Adresse"
+      },
+      "mac_address": {
+        "name": "MAC-Adresse"
+      }
+    },
+    "button": {
+      "rotate_right": {
+        "name": "Roter Høyre"
+      },
+      "rotate_left": {
+        "name": "Roter Venstre"
+      },
+      "persist_plugin": {
+        "name": "Gjør Plugin Vedvarende"
+      },
+      "clear_storage": {
+        "name": "Tøm Lagring"
+      },
+      "start_schedule": {
+        "name": "Start Tidsplan"
+      },
+      "stop_schedule": {
+        "name": "Stopp Tidsplan"
+      },
+      "clear_schedule": {
+        "name": "Tøm Tidsplan"
+      }
+    },
+    "select": {
+      "plugin": {
+        "name": "Plugin"
+      }
+    },
+    "camera": {
+      "screen": {
+        "name": "Skjerm"
+      }
+    }
   }
 }

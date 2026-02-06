@@ -119,5 +119,72 @@
       "name": "Ottieni dati display",
       "description": "Ottieni i dati raw del display (256 byte per matrice 16x16)."
     }
+  },
+  "entity": {
+    "sensor": {
+      "rotation": {
+        "name": "Rotazione"
+      },
+      "brightness": {
+        "name": "Luminosità"
+      },
+      "active_plugin": {
+        "name": "Plugin Attivo"
+      },
+      "status": {
+        "name": "Stato"
+      },
+      "schedule_count": {
+        "name": "Conteggio Programmazione"
+      },
+      "wifi_signal": {
+        "name": "Segnale WiFi"
+      },
+      "uptime": {
+        "name": "Tempo di Attività"
+      },
+      "free_memory": {
+        "name": "Memoria Libera"
+      },
+      "ip_address": {
+        "name": "Indirizzo IP"
+      },
+      "mac_address": {
+        "name": "Indirizzo MAC"
+      }
+    },
+    "button": {
+      "rotate_right": {
+        "name": "Ruota Destra"
+      },
+      "rotate_left": {
+        "name": "Ruota Sinistra"
+      },
+      "persist_plugin": {
+        "name": "Rendi Persistente Plugin"
+      },
+      "clear_storage": {
+        "name": "Cancella Memoria"
+      },
+      "start_schedule": {
+        "name": "Avvia Programmazione"
+      },
+      "stop_schedule": {
+        "name": "Ferma Programmazione"
+      },
+      "clear_schedule": {
+        "name": "Cancella Programmazione"
+      }
+    },
+    "select": {
+      "plugin": {
+        "name": "Plugin"
+      }
+    },
+    "camera": {
+      "screen": {
+        "name": "Schermo"
+      }
+    }
   }
 }

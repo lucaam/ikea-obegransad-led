@@ -5,6 +5,71 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-02-07
+
+### Added
+
+#### Sensor Entities
+- **Rotation**: Current display rotation (0°, 90°, 180°, 270°)
+- **Brightness**: Current brightness as percentage (0-100%)
+- **Active Plugin**: Name of the currently active plugin
+- **Status**: Device status indicator (NONE, WSBINARY, UPDATE, LOADING)
+- **Schedule Count**: Number of scheduled items in queue
+
+#### Diagnostic Sensors
+- **WiFi Signal**: Device WiFi signal strength in dBm
+- **Uptime**: Device uptime in seconds
+- **Free Memory**: Available heap memory in bytes
+- **IP Address**: Device network IP address
+- **MAC Address**: Device MAC address
+
+#### Button Entities
+- **Rotate Right**: Rotate display 90 degrees clockwise
+- **Rotate Left**: Rotate display 90 degrees counter-clockwise
+- **Persist Plugin**: Save current plugin as boot default
+- **Clear Storage**: Clear all device storage
+- **Start Schedule**: Start automatic plugin switching
+- **Stop Schedule**: Stop automatic plugin switching
+- **Clear Schedule**: Clear all scheduled items
+
+#### Select Entity
+- **Plugin Selection**: Dropdown to switch active plugin from device page
+
+#### Camera Entity
+- **Screen Preview**: Live preview of 16x16 LED matrix display (requires Pillow library)
+
+#### Notify Service
+- **notify.ikea_obegransad_led**: Send text messages to display with optional parameters (repeat, delay, graph, message_id)
+
+#### Device Information
+- Enhanced device_info with configuration URL and network details
+- Diagnostic category for system/network sensors
+
+### Changed
+- Updated version to 0.4.0
+- Expanded coordinator with diagnostic attributes (wifi_rssi, uptime, free_memory, ip_address, mac_address)
+- Enhanced entity organization with proper translation keys
+
+### Technical
+- New module: `sensor.py` for state and diagnostic sensors (10 entities)
+- New module: `button.py` for quick action buttons (7 entities)
+- New module: `select.py` for plugin selection dropdown
+- New module: `notify.py` for message notification service
+- New module: `camera.py` for LED matrix preview (optional Pillow dependency)
+- Updated `const.py` with new platform constants
+
+### Translations
+- Added Italian translations for all new entities
+- Added English translations for all new entities
+- Added Norwegian translations for all new entities
+- Added French translations for all new entities
+
+### Notes
+- Diagnostic sensors are hidden from main UI but available in diagnostics panel
+- Camera entity requires Pillow library: `pip install Pillow`
+- All new entities are properly integrated with WebSocket updates
+- Sensor data requires firmware support for wifi_rssi, uptime, freeHeap, ipAddress, macAddress fields
+
 ## [0.3.0] - 2026-02-06
 
 ### Added

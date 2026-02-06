@@ -37,5 +37,72 @@
         }
       }
     }
+  },
+  "entity": {
+    "sensor": {
+      "rotation": {
+        "name": "Rotation"
+      },
+      "brightness": {
+        "name": "Luminosité"
+      },
+      "active_plugin": {
+        "name": "Plugin Actif"
+      },
+      "status": {
+        "name": "État"
+      },
+      "schedule_count": {
+        "name": "Nombre de Programmations"
+      },
+      "wifi_signal": {
+        "name": "Signal WiFi"
+      },
+      "uptime": {
+        "name": "Temps d'Activité"
+      },
+      "free_memory": {
+        "name": "Mémoire Libre"
+      },
+      "ip_address": {
+        "name": "Adresse IP"
+      },
+      "mac_address": {
+        "name": "Adresse MAC"
+      }
+    },
+    "button": {
+      "rotate_right": {
+        "name": "Rotation Droite"
+      },
+      "rotate_left": {
+        "name": "Rotation Gauche"
+      },
+      "persist_plugin": {
+        "name": "Rendre Plugin Persistant"
+      },
+      "clear_storage": {
+        "name": "Effacer Stockage"
+      },
+      "start_schedule": {
+        "name": "Démarrer Programmation"
+      },
+      "stop_schedule": {
+        "name": "Arrêter Programmation"
+      },
+      "clear_schedule": {
+        "name": "Effacer Programmation"
+      }
+    },
+    "select": {
+      "plugin": {
+        "name": "Plugin"
+      }
+    },
+    "camera": {
+      "screen": {
+        "name": "Écran"
+      }
+    }
   }
 }

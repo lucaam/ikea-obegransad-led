@@ -369,6 +369,12 @@ class IkeaObegransadLedDataUpdateCoordinator(DataUpdateCoordinator):
         self.status = "NONE"
         self.websocket = None
         self.websocket_task = None
+        # Diagnostic attributes
+        self.wifi_rssi = None
+        self.uptime = None
+        self.free_memory = None
+        self.ip_address = None
+        self.mac_address = None
         _LOGGER.debug("IkeaObegransadLedDataUpdateCoordinator initialized.")
 
     def update_from_info(self, data: dict[str, Any]) -> None:
@@ -398,6 +404,13 @@ class IkeaObegransadLedDataUpdateCoordinator(DataUpdateCoordinator):
         self.rows = data.get("rows", 16)
         self.cols = data.get("cols", 16)
         self.status = data.get("status", "NONE")
+        
+        # Diagnostic information from device
+        self.wifi_rssi = data.get("rssi")
+        self.uptime = data.get("uptime")
+        self.free_memory = data.get("freeHeap")
+        self.ip_address = data.get("ipAddress")
+        self.mac_address = data.get("macAddress")
 
     async def _async_update_data(self) -> dict[str, Any] | None:
         """

@@ -119,5 +119,72 @@
       "name": "Get display data",
       "description": "Get raw display data (256 bytes for 16x16 matrix)."
     }
+  },
+  "entity": {
+    "sensor": {
+      "rotation": {
+        "name": "Rotation"
+      },
+      "brightness": {
+        "name": "Brightness"
+      },
+      "active_plugin": {
+        "name": "Active Plugin"
+      },
+      "status": {
+        "name": "Status"
+      },
+      "schedule_count": {
+        "name": "Schedule Count"
+      },
+      "wifi_signal": {
+        "name": "WiFi Signal"
+      },
+      "uptime": {
+        "name": "Uptime"
+      },
+      "free_memory": {
+        "name": "Free Memory"
+      },
+      "ip_address": {
+        "name": "IP Address"
+      },
+      "mac_address": {
+        "name": "MAC Address"
+      }
+    },
+    "button": {
+      "rotate_right": {
+        "name": "Rotate Right"
+      },
+      "rotate_left": {
+        "name": "Rotate Left"
+      },
+      "persist_plugin": {
+        "name": "Persist Plugin"
+      },
+      "clear_storage": {
+        "name": "Clear Storage"
+      },
+      "start_schedule": {
+        "name": "Start Schedule"
+      },
+      "stop_schedule": {
+        "name": "Stop Schedule"
+      },
+      "clear_schedule": {
+        "name": "Clear Schedule"
+      }
+    },
+    "select": {
+      "plugin": {
+        "name": "Plugin"
+      }
+    },
+    "camera": {
+      "screen": {
+        "name": "Screen"
+      }
+    }
   }
 }
