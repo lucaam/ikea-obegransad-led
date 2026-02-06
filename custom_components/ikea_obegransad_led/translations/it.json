@@ -46,8 +46,78 @@
         "delay": {
           "name": "Ritardo",
           "description": "Ritardo in millisecondi tra i fotogrammi del messaggio (0-10000)."
+        },
+        "graph": {
+          "name": "Dati grafico",
+          "description": "Numeri interi separati da virgola (0-15) per la visualizzazione del grafico."
+        },
+        "miny": {
+          "name": "Y minimo grafico",
+          "description": "Valore Y minimo del grafico (0-15)."
+        },
+        "maxy": {
+          "name": "Y massimo grafico",
+          "description": "Valore Y massimo del grafico (0-15)."
+        },
+        "message_id": {
+          "name": "ID messaggio",
+          "description": "Identificatore univoco per il messaggio."
         }
       }
+    },
+    "remove_message": {
+      "name": "Rimuovi messaggio",
+      "description": "Rimuove un messaggio specifico dal display tramite ID.",
+      "fields": {
+        "message_id": {
+          "name": "ID messaggio",
+          "description": "L'ID del messaggio da rimuovere."
+        }
+      }
+    },
+    "set_schedule": {
+      "name": "Imposta programmazione",
+      "description": "Imposta la programmazione automatica del cambio plugin.",
+      "fields": {
+        "schedule": {
+          "name": "Programmazione",
+          "description": "Array JSON degli elementi di programmazione con pluginId e durata in secondi."
+        }
+      }
+    },
+    "start_schedule": {
+      "name": "Avvia programmazione",
+      "description": "Avvia la programmazione dei plugin."
+    },
+    "stop_schedule": {
+      "name": "Ferma programmazione",
+      "description": "Ferma la programmazione dei plugin."
+    },
+    "clear_schedule": {
+      "name": "Cancella programmazione",
+      "description": "Cancella completamente la programmazione dei plugin."
+    },
+    "rotate_display": {
+      "name": "Ruota display",
+      "description": "Ruota il display di 90 gradi (richiede supporto WebSocket).",
+      "fields": {
+        "direction": {
+          "name": "Direzione",
+          "description": "Direzione di rotazione (destra o sinistra)."
+        }
+      }
+    },
+    "persist_plugin": {
+      "name": "Rendi persistente plugin",
+      "description": "Salva il plugin corrente come predefinito da caricare all'avvio (richiede supporto WebSocket)."
+    },
+    "clear_storage": {
+      "name": "Cancella memoria",
+      "description": "Cancella la memoria del dispositivo."
+    },
+    "get_display_data": {
+      "name": "Ottieni dati display",
+      "description": "Ottieni i dati raw del display (256 byte per matrice 16x16)."
     }
   }
 }

@@ -211,7 +211,11 @@ class IkeaObegransadLedApiClient:
         message_id: str | None = None,
     ) -> dict[str, Any] | None:
         """Send a message to the display."""
-        params = {"text": text, "repeat": repeat, "delay": delay}
+        params = {}
+        if text is not None:
+            params["text"] = text
+        params["repeat"] = repeat
+        params["delay"] = delay
         if message_id is not None:
             params["id"] = message_id
         if graph is not None:
@@ -220,8 +224,6 @@ class IkeaObegransadLedApiClient:
             params["miny"] = miny
         if maxy is not None:
             params["maxy"] = maxy
-        if message_id is not None:
-            params["id"] = message_id
         _LOGGER.debug("Sending message with params: %s", params)
         return await self._request("GET", "message", params=params)
 
@@ -239,3 +241,102 @@ class IkeaObegransadLedApiClient:
         """
         _LOGGER.debug("Removing message with ID: %s", message_id)
         return await self._request("GET", "removemessage", {"id": message_id})
+
+    async def set_schedule(self, schedule: str) -> dict[str, Any] | None:
+        """
+        Set plugin schedule.
+
+        Args:
+            schedule (str): JSON string of schedule items.
+
+        Returns:
+            dict: The response from the API.
+
+        """
+        _LOGGER.debug("Setting schedule: %s", schedule)
+        return await self._request("POST", "schedule", {"schedule": schedule})
+
+    async def start_schedule(self) -> dict[str, Any] | None:
+        """Start the plugin schedule."""
+        _LOGGER.debug("Starting schedule")
+        return await self._request("GET", "schedule/start")
+
+    async def stop_schedule(self) -> dict[str, Any] | None:
+        """Stop the plugin schedule."""
+        _LOGGER.debug("Stopping schedule")
+        return await self._request("GET", "schedule/stop")
+
+    async def clear_schedule(self) -> dict[str, Any] | None:
+        """Clear the plugin schedule."""
+        _LOGGER.debug("Clearing schedule")
+        return await self._request("GET", "schedule/clear")
+
+    async def rotate_display(self, direction: str = "right") -> dict[str, Any] | None:
+        """
+        Rotate the display 90 degrees.
+
+        Args:
+            direction (str): Rotation direction ('right' or 'left').
+
+        Returns:
+            dict: The response from the API.
+
+        """
+        _LOGGER.debug("Rotating display %s", direction)
+        # This would typically be done via WebSocket, but we can try REST fallback
+        # The C++ code shows this is a websocket event, we'll need to handle this
+        # For now, return None as this requires websocket implementation
+        _LOGGER.warning(
+            "Rotate display requires WebSocket connection - not yet implemented via REST"
+        )
+        return None
+
+    async def persist_plugin(self) -> dict[str, Any] | None:
+        """
+        Save current plugin as default.
+
+        Returns:
+            dict: The response from the API.
+
+        """
+        _LOGGER.debug("Persisting current plugin")
+        # This would typically be done via WebSocket
+        _LOGGER.warning(
+            "Persist plugin requires WebSocket connection - not yet implemented via REST"
+        )
+        return None
+
+    async def clear_storage(self) -> dict[str, Any] | None:
+        """
+        Clear device storage.
+
+        Returns:
+            dict: The response from the API.
+
+        """
+        _LOGGER.debug("Clearing storage")
+        return await self._request("GET", "clearstorage")
+
+    async def get_display_data(self) -> bytes | None:
+        """
+        Get raw display data.
+
+        Returns:
+            bytes: The raw display data (256 bytes for 16x16 matrix).
+
+        """
+        _LOGGER.debug("Getting display data")
+        url = f"{self.base_url}/data"
+        try:
+            async with self.session.request(
+                "GET", url, timeout=TIMEOUT
+            ) as response:
+                if response.status == HTTP_OK:
+                    data = await response.read()
+                    _LOGGER.debug("Retrieved display data: %d bytes", len(data))
+                    return data
+                _LOGGER.error("Failed to get display data: %s", response.status)
+                return None
+        except aiohttp.ClientError:
+            _LOGGER.exception("API connection error while getting display data")
+            return None

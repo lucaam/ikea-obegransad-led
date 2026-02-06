@@ -26,3 +26,92 @@ send_message:
           min: 10
           max: 200
           unit_of_measurement: "ms"
+    graph:
+      description: "Comma-separated integers (0-15) for graph display"
+      example: "8,5,2,1,0,0,1,4,7,10,13,14,15,15,14,11"
+      required: false
+      selector:
+        text:
+    miny:
+      description: "Graph minimum Y value"
+      example: 0
+      required: false
+      selector:
+        number:
+          min: 0
+          max: 15
+    maxy:
+      description: "Graph maximum Y value"
+      example: 15
+      required: false
+      selector:
+        number:
+          min: 0
+          max: 15
+    message_id:
+      description: "Unique message identifier"
+      example: "msg_123"
+      required: false
+      selector:
+        text:
+
+remove_message:
+  name: "Remove Message"
+  description: "Remove a specific message by ID from the display"
+  fields:
+    message_id:
+      description: "Message ID to remove"
+      example: "msg_123"
+      required: true
+      selector:
+        text:
+
+set_schedule:
+  name: "Set Plugin Schedule"
+  description: "Set automatic plugin switching schedule"
+  fields:
+    schedule:
+      description: "JSON array of schedule items with pluginId and duration (in seconds)"
+      example: '[{"pluginId": 2, "duration": 60}, {"pluginId": 4, "duration": 120}]'
+      required: true
+      selector:
+        text:
+          multiline: true
+
+start_schedule:
+  name: "Start Schedule"
+  description: "Start the plugin schedule"
+
+stop_schedule:
+  name: "Stop Schedule"
+  description: "Stop the plugin schedule"
+
+clear_schedule:
+  name: "Clear Schedule"
+  description: "Clear the plugin schedule completely"
+
+rotate_display:
+  name: "Rotate Display"
+  description: "Rotate the display 90 degrees (requires WebSocket support)"
+  fields:
+    direction:
+      description: "Rotation direction"
+      example: "right"
+      required: true
+      selector:
+        select:
+          options:
+            - "right"
+            - "left"
+
+persist_plugin:
+  name: "Persist Current Plugin"
+  description: "Save current plugin as default to load on boot (requires WebSocket support)"
+
+clear_storage:
+  name: "Clear Storage"
+  description: "Clear device storage"
+
+get_display_data:
+  name: "Get Display Data"
+  description: "Get raw display data (256 bytes for 16x16 matrix)"

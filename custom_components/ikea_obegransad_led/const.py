@@ -4,7 +4,7 @@
 NAME = "IKEA OBEGRÄNSAD Led"
 DOMAIN = "ikea_obegransad_led"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.1.0"
+VERSION = "0.2.0"
 
 ATTRIBUTION = "Data provided by IKEA OBEGRÄNSAD API for Wall Light with LED Matrix"
 ISSUE_URL = "https://github.com/lucaam/ikea-obegransad-led/issues"
@@ -16,7 +16,9 @@ ICON = "mdi:wall"
 
 # Platforms
 LIGHT = "light"
-PLATFORMS = [LIGHT]
+SENSOR = "sensor"
+BINARY_SENSOR = "binary_sensor"
+PLATFORMS = [LIGHT, BINARY_SENSOR]
 
 
 DEFAULT_EFFECTS = [
@@ -44,6 +46,33 @@ CONF_SCAN_INTERVAL = 30
 CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT = "DDP"
 # Defaults
 DEFAULT_NAME = "Ikea OBEGRÄNSAD LED Wall Light"
+
+# Service names
+SERVICE_SEND_MESSAGE = "send_message"
+SERVICE_REMOVE_MESSAGE = "remove_message"
+SERVICE_SET_SCHEDULE = "set_schedule"
+SERVICE_START_SCHEDULE = "start_schedule"
+SERVICE_STOP_SCHEDULE = "stop_schedule"
+SERVICE_CLEAR_SCHEDULE = "clear_schedule"
+SERVICE_ROTATE_DISPLAY = "rotate_display"
+SERVICE_PERSIST_PLUGIN = "persist_plugin"
+SERVICE_CLEAR_STORAGE = "clear_storage"
+SERVICE_GET_DISPLAY_DATA = "get_display_data"
+
+# Service attributes
+ATTR_MESSAGE = "message"
+ATTR_MESSAGE_ID = "message_id"
+ATTR_REPEAT = "repeat"
+ATTR_DELAY = "delay"
+ATTR_GRAPH = "graph"
+ATTR_MINY = "miny"
+ATTR_MAXY = "maxy"
+ATTR_DIRECTION = "direction"
+ATTR_SCHEDULE = "schedule"
+
+# Rotation directions
+DIRECTION_RIGHT = "right"
+DIRECTION_LEFT = "left"
 
 
 STARTUP_MESSAGE = f"""

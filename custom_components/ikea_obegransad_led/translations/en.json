@@ -46,8 +46,78 @@
         "delay": {
           "name": "Delay",
           "description": "Delay in milliseconds between message frames (0-10000)."
+        },
+        "graph": {
+          "name": "Graph data",
+          "description": "Comma-separated integers (0-15) for graph display."
+        },
+        "miny": {
+          "name": "Graph minimum Y",
+          "description": "Graph minimum Y value (0-15)."
+        },
+        "maxy": {
+          "name": "Graph maximum Y",
+          "description": "Graph maximum Y value (0-15)."
+        },
+        "message_id": {
+          "name": "Message ID",
+          "description": "Unique identifier for the message."
         }
       }
+    },
+    "remove_message": {
+      "name": "Remove message",
+      "description": "Remove a specific message from the display by ID.",
+      "fields": {
+        "message_id": {
+          "name": "Message ID",
+          "description": "The ID of the message to remove."
+        }
+      }
+    },
+    "set_schedule": {
+      "name": "Set schedule",
+      "description": "Set automatic plugin switching schedule.",
+      "fields": {
+        "schedule": {
+          "name": "Schedule",
+          "description": "JSON array of schedule items with pluginId and duration in seconds."
+        }
+      }
+    },
+    "start_schedule": {
+      "name": "Start schedule",
+      "description": "Start the plugin schedule."
+    },
+    "stop_schedule": {
+      "name": "Stop schedule",
+      "description": "Stop the plugin schedule."
+    },
+    "clear_schedule": {
+      "name": "Clear schedule",
+      "description": "Clear the plugin schedule completely."
+    },
+    "rotate_display": {
+      "name": "Rotate display",
+      "description": "Rotate the display 90 degrees (requires WebSocket support).",
+      "fields": {
+        "direction": {
+          "name": "Direction",
+          "description": "Rotation direction (right or left)."
+        }
+      }
+    },
+    "persist_plugin": {
+      "name": "Persist plugin",
+      "description": "Save current plugin as default to load on boot (requires WebSocket support)."
+    },
+    "clear_storage": {
+      "name": "Clear storage",
+      "description": "Clear device storage."
+    },
+    "get_display_data": {
+      "name": "Get display data",
+      "description": "Get raw display data (256 bytes for 16x16 matrix)."
     }
   }
 }
