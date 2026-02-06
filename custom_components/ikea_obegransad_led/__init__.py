@@ -51,6 +51,7 @@ from .const import (
     SERVICE_START_SCHEDULE,
     SERVICE_STOP_SCHEDULE,
 )
+from .websocket import IkeaObegransadWebSocket
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
@@ -105,6 +106,21 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         if entity_id not in hass.states.async_all():
             _LOGGER.info("Creating input_text.ikea_message entity.")
             hass.states.async_set(entity_id, "", {"friendly_name": name})
+
+        websocket = IkeaObegransadWebSocket(entry.data[CONF_HOST], session)
+        coordinator.websocket = websocket
+
+        async def handle_ws_message(data: dict[str, Any]) -> None:
+            """Handle WebSocket info messages from the device."""
+            if data.get("event") != "info":
+                return
+            coordinator.update_from_info(data)
+            coordinator.async_set_updated_data(data)
+
+        websocket.add_callback(handle_ws_message)
+        coordinator.websocket_task = hass.async_create_task(
+            websocket.listen_forever()
+        )
 
 
         async def handle_send_message(call: ServiceCall) -> None:
@@ -221,25 +237,27 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         async def handle_rotate_display(call: ServiceCall) -> None:
             """Handle rotating the display."""
             direction = call.data.get(ATTR_DIRECTION, "right")
-            result = await client.rotate_display(direction)
-            if result:
-                await coordinator.async_request_refresh()
-                _LOGGER.info("Display rotated %s", direction)
+            if coordinator.websocket:
+                result = await coordinator.websocket.rotate_display(direction)
+                if result:
+                    await coordinator.websocket.request_info()
+                    _LOGGER.info("Display rotated %s", direction)
+                else:
+                    _LOGGER.error("Failed to rotate display via WebSocket")
             else:
-                _LOGGER.warning(
-                    "Rotate display requires WebSocket - not yet implemented"
-                )
+                _LOGGER.warning("WebSocket not initialized for rotate_display")
 
         async def handle_persist_plugin(call: ServiceCall) -> None:
             """Handle persisting current plugin."""
-            result = await client.persist_plugin()
-            if result:
-                await coordinator.async_request_refresh()
-                _LOGGER.info("Plugin persisted")
+            if coordinator.websocket:
+                result = await coordinator.websocket.persist_plugin()
+                if result:
+                    await coordinator.websocket.request_info()
+                    _LOGGER.info("Plugin persisted")
+                else:
+                    _LOGGER.error("Failed to persist plugin via WebSocket")
             else:
-                _LOGGER.warning(
-                    "Persist plugin requires WebSocket - not yet implemented"
-                )
+                _LOGGER.warning("WebSocket not initialized for persist_plugin")
 
         async def handle_clear_storage(call: ServiceCall) -> None:
             """Handle clearing device storage."""
@@ -296,6 +314,12 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
         "Unloading config entry for IKEA OBEGRÄNSAD Led with entry ID: %s",
         entry.entry_id,
     )
+    coordinator = hass.data[DOMAIN].get(entry.entry_id)
+    if coordinator and coordinator.websocket_task:
+        coordinator.websocket_task.cancel()
+    if coordinator and coordinator.websocket:
+        await coordinator.websocket.disconnect()
+
     unloaded = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unloaded:
         _LOGGER.debug("Successfully unloaded platform for entry ID: %s", entry.entry_id)
@@ -343,6 +367,8 @@ class IkeaObegransadLedDataUpdateCoordinator(DataUpdateCoordinator):
         self.rows = 16
         self.cols = 16
         self.status = "NONE"
+        self.websocket = None
+        self.websocket_task = None
         _LOGGER.debug("IkeaObegransadLedDataUpdateCoordinator initialized.")
 
     def update_from_info(self, data: dict[str, Any]) -> None:

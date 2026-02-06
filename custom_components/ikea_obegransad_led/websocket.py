@@ -46,7 +46,9 @@ class IkeaObegransadWebSocket:
         self.ws_url = f"ws://{host}/ws"
         self._ws: aiohttp.ClientWebSocketResponse | None = None
         self._connected = False
+        self._closing = False
         self._callbacks: list[Callable] = []
+        self._max_backoff = 300
         _LOGGER.debug("WebSocket client initialized for host: %s", host)
 
     async def connect(self) -> bool:
@@ -57,6 +59,10 @@ class IkeaObegransadWebSocket:
             bool: True if connection successful, False otherwise.
 
         """
+        if self._closing:
+            _LOGGER.debug("WebSocket connect skipped: closing requested")
+            return False
+
         if self._connected and self._ws and not self._ws.closed:
             return True
 
@@ -73,6 +79,7 @@ class IkeaObegransadWebSocket:
 
     async def disconnect(self) -> None:
         """Disconnect from the WebSocket."""
+        self._closing = True
         if self._ws and not self._ws.closed:
             await self._ws.close()
             _LOGGER.debug("WebSocket disconnected")
@@ -234,8 +241,8 @@ class IkeaObegransadWebSocket:
         It will continuously listen for messages and call registered callbacks.
         """
         if not self.connected:
-            if not await self.connect():
-                return
+            _LOGGER.debug("WebSocket listen called while disconnected")
+            return
 
         try:
             async for msg in self._ws:
@@ -266,3 +273,26 @@ class IkeaObegransadWebSocket:
         finally:
             self._connected = False
             _LOGGER.debug("WebSocket listener stopped")
+
+    async def listen_forever(self) -> None:
+        """
+        Listen for incoming WebSocket messages with automatic reconnection.
+
+        Uses exponential backoff with a max delay of 5 minutes.
+        """
+        self._closing = False
+        backoff = 1
+
+        while not self._closing:
+            connected = await self.connect()
+            if not connected:
+                await asyncio.sleep(backoff)
+                backoff = min(self._max_backoff, backoff * 2)
+                continue
+
+            backoff = 1
+            await self.listen()
+
+            if not self._closing:
+                await asyncio.sleep(backoff)
+                backoff = min(self._max_backoff, backoff * 2)

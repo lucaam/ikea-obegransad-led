@@ -14,8 +14,8 @@ Home Assistant integration to control IKEA OBEGRÄNSAD Wall Lamp hacked with [ph
 - [x] Turn the lamp on and off
 - [x] Adjust light intensity (brightness 0-255)
 - [x] Switch between available plugins/effects
-- [ ] Display rotation (0°, 90°, 180°, 270°) *
-- [ ] Persist current plugin as default *
+- [x] Display rotation (0°, 90°, 180°, 270°) *
+- [x] Persist current plugin as default *
 
 ### Messages & Display
 - [x] Send text messages with custom repeat and delay
@@ -32,11 +32,11 @@ Home Assistant integration to control IKEA OBEGRÄNSAD Wall Lamp hacked with [ph
 ### Additional Features
 - [x] Extra state attributes (rotation, schedule, status, rows, cols)
 - [x] Full REST API support
-- [ ] WebSocket support for real-time updates *
+- [x] WebSocket support for real-time updates *
 - [x] Clear device storage
 - [x] Local polling integration
 
-<sup>* Requires WebSocket connection (planned for 0.3.0)</sup>
+<sup>* Requires WebSocket connection.</sup>
 
 ## 📦 Installation
 
@@ -122,8 +122,6 @@ service: ikea_obegransad_led.clear_schedule
 
 #### Rotate Display
 
-Requires WebSocket support (available in 0.3.0).
-
 ```yaml
 service: ikea_obegransad_led.rotate_display
 data:
@@ -131,8 +129,6 @@ data:
 ```
 
 #### Persist Plugin
-
-Requires WebSocket support (available in 0.3.0).
 
 Save the current plugin as default:
 
