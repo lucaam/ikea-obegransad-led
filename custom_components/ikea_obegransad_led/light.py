@@ -69,6 +69,19 @@ class IkeaObegransadLedLight(CoordinatorEntity, LightEntity):
         return "mdi:led-strip-variant-off"
 
     @property
+    def extra_state_attributes(self) -> dict:
+        """Return additional state attributes."""
+        return {
+            "rotation": self.coordinator.rotation,
+            "persist_plugin": self.coordinator.persist_plugin,
+            "schedule_active": self.coordinator.schedule_active,
+            "schedule": self.coordinator.schedule,
+            "rows": self.coordinator.rows,
+            "cols": self.coordinator.cols,
+            "status": self.coordinator.status,
+        }
+
+    @property
     def device_info(self) -> dict:
         """
         Return device information about the device.
