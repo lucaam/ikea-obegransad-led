@@ -23,7 +23,12 @@ from homeassistant import config_entries
 from homeassistant.helpers.aiohttp_client import async_create_clientsession
 
 from .api import IkeaObegransadLedApiClient
-from .const import CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT, CONF_HOST, DOMAIN
+from .const import (
+    CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT,
+    CONF_HOST,
+    CONF_WEATHER_LOCATION,
+    DOMAIN,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -103,6 +108,7 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
                         CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT,
                         default=CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT,
                     ): str,
+                    vol.Optional(CONF_WEATHER_LOCATION, default=""): str,
                 },
             ),
             errors=self._errors,

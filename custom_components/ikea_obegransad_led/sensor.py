@@ -44,7 +44,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import CONF_HOST, DOMAIN, VERSION
+from .const import CONF_HOST, CONF_WEATHER_LOCATION, DOMAIN, VERSION
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
@@ -444,6 +444,45 @@ class IkeaObegransadMacAddressSensor(CoordinatorEntity, SensorEntity):
         self.async_write_ha_state()
 
 
+class IkeaObegransadWeatherLocationSensor(CoordinatorEntity, SensorEntity):
+    """Sensor for weather location configuration."""
+
+    _attr_has_entity_name = True
+    _attr_icon = "mdi:weather-cloudy"
+    _attr_translation_key = "weather_location"
+
+    def __init__(self, coordinator: CoordinatorEntity, entry: ConfigEntry) -> None:
+        """Initialize the weather location sensor."""
+        super().__init__(coordinator)
+        self.entry = entry
+        self._attr_unique_id = f"{entry.entry_id}_weather_location"
+        self._attr_name = "Weather Location"
+
+    @property
+    def native_value(self) -> str | None:
+        """Return the configured weather location."""
+        location = self.entry.data.get(CONF_WEATHER_LOCATION, "")
+        return location if location else None
+
+    @property
+    def device_info(self) -> dict:
+        """Return device information."""
+        return {
+            "identifiers": {(DOMAIN, self.entry.entry_id)},
+            "name": "Ikea OBEGRÄNSAD LED Wall Light",
+            "manufacturer": "IKEA",
+            "model": "OBEGRÄNSAD LED Wall Light",
+            "sw_version": VERSION,
+            "configuration_url": f"http://{self.entry.data[CONF_HOST]}",
+        }
+
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        location = self.entry.data.get(CONF_WEATHER_LOCATION, "")
+        _LOGGER.debug("Weather location sensor update: %s", location)
+        self.async_write_ha_state()
+
+
 async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: Callable
 ) -> None:
@@ -457,6 +496,7 @@ async def async_setup_entry(
             IkeaObegransadActivePluginSensor(coordinator, entry),
             IkeaObegransadStatusSensor(coordinator, entry),
             IkeaObegransadScheduleCountSensor(coordinator, entry),
+            IkeaObegransadWeatherLocationSensor(coordinator, entry),
             IkeaObegransadWifiSignalSensor(coordinator, entry),
             IkeaObegransadUptimeSensor(coordinator, entry),
             IkeaObegransadFreeMemorySensor(coordinator, entry),
