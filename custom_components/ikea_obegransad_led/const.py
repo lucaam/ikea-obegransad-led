@@ -4,7 +4,7 @@
 NAME = "IKEA OBEGRÄNSAD Led"
 DOMAIN = "ikea_obegransad_led"
 DOMAIN_DATA = f"{DOMAIN}_data"
-VERSION = "0.4.0"
+VERSION = "0.4.1"
 
 ATTRIBUTION = "Data provided by IKEA OBEGRÄNSAD API for Wall Light with LED Matrix"
 ISSUE_URL = "https://github.com/lucaam/ikea-obegransad-led/issues"

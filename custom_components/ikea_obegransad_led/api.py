@@ -315,7 +315,7 @@ class IkeaObegransadLedApiClient:
 
         """
         _LOGGER.debug("Clearing storage")
-        return await self._request("GET", "clearstorage")
+        return await self._request("GET", "storage/clear")
 
     async def get_display_data(self) -> bytes | None:
         """

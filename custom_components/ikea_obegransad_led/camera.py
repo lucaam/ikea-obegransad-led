@@ -43,7 +43,8 @@ class IkeaObegransadScreenCamera(CoordinatorEntity, Camera):
 
     def __init__(self, coordinator: CoordinatorEntity, entry: ConfigEntry) -> None:
         """Initialize the camera entity."""
-        super().__init__(coordinator)
+        Camera.__init__(self)
+        CoordinatorEntity.__init__(self, coordinator)
         self.entry = entry
         self._attr_unique_id = f"{entry.entry_id}_screen_camera"
         self._attr_name = "Screen"
@@ -72,12 +73,19 @@ class IkeaObegransadScreenCamera(CoordinatorEntity, Camera):
         try:
             # Get raw display data (256 bytes for 16x16 matrix)
             data = await self.coordinator.client.get_display_data()
-            if not data or len(data) != 256:
-                _LOGGER.warning(
-                    "Invalid display data: expected 256 bytes, got %s",
-                    len(data) if data else 0,
-                )
+            if not data:
+                _LOGGER.warning("Invalid display data: empty response")
                 return None
+            if len(data) != 256:
+                _LOGGER.warning(
+                    "Invalid display data: expected 256 bytes, got %s. "
+                    "Normalizing to 256 bytes for preview.",
+                    len(data),
+                )
+                if len(data) < 256:
+                    data = data.ljust(256, b"\x00")
+                else:
+                    data = data[:256]
 
             # Convert 256 bytes to 16x16 grayscale image
             # Each byte represents the brightness of one pixel (0-255)
