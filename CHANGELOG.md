@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-02-07
+
+### Added
+
+#### Configuration
+- **Weather Location**: Optional configuration field to specify weather/location information for future weather plugin integration
+
+#### Sensors
+- **Weather Location Sensor**: New sensor entity that displays the configured weather location among other device sensors
+
+#### Icons & Branding
+- **Material Design Icons**: SVG icon for use in custom frontends and documentation
+- **Material Design PNG Icons**: 24×24 and 48×48 PNG versions for various display contexts
+- **HACS Icons**: PNG icons (200×200 and 400×400) with glow effect for HACS marketplace integration
+- **SVG Icon**: Scalable vector version of HACS icon for web use
+
+### Changed
+- Updated version to 0.5.0
+- Enhanced device configuration form with weather location option
+- Improved visual presentation in HACS marketplace with branded icons
+
+### Notes
+- Weather Location is optional and can be left blank if weather plugin is not planned
+
 ## [0.4.1] - 2026-02-07
 
 ### Fixed
