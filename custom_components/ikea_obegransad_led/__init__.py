@@ -38,6 +38,7 @@ from .const import (
     CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT,
     CONF_HOST,
     CONF_SCAN_INTERVAL,
+    CONF_WEATHER_LOCATION,
     DOMAIN,
     PLATFORMS,
     SERVICE_CLEAR_SCHEDULE,
@@ -99,6 +100,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER.info("Successfully set up config entry for IKEA OBEGRÄNSAD Led.")
         hass.data[DOMAIN][entry.entry_id] = coordinator
         await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+        weather_location = entry.data.get(CONF_WEATHER_LOCATION, "").strip()
+        if weather_location:
+            if await client.set_weather_location(weather_location):
+                coordinator.weather_location = weather_location
+        else:
+            config = await client.get_config()
+            if config:
+                coordinator.weather_location = config.get("weatherLocation")
 
         # Creazione automatica di input_text.ikea_message se non esiste
         entity_id = "input_text.ikea_message"
@@ -369,6 +379,7 @@ class IkeaObegransadLedDataUpdateCoordinator(DataUpdateCoordinator):
         self.status = "NONE"
         self.websocket = None
         self.websocket_task = None
+        self.weather_location = None
         # Diagnostic attributes
         self.wifi_rssi = None
         self.uptime = None
@@ -412,6 +423,10 @@ class IkeaObegransadLedDataUpdateCoordinator(DataUpdateCoordinator):
         self.ip_address = data.get("ipAddress")
         self.mac_address = data.get("macAddress")
 
+    def update_from_config(self, data: dict[str, Any]) -> None:
+        """Update coordinator state from config payload."""
+        self.weather_location = data.get("weatherLocation")
+
     async def _async_update_data(self) -> dict[str, Any] | None:
         """
         Fetch data from the IKEA OBEGRÄNSAD Led API and update internal state.
@@ -426,6 +441,11 @@ class IkeaObegransadLedDataUpdateCoordinator(DataUpdateCoordinator):
             data = await self.client.get_info()
             if data:
                 self.update_from_info(data)
+
+                if not self.weather_location:
+                    config = await self.client.get_config()
+                    if config:
+                        self.update_from_config(config)
 
                 _LOGGER.debug(
                     "Brightness updated to: %d, Lamp is on: %s, Plugin active is %d",

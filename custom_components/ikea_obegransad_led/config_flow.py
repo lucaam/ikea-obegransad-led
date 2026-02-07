@@ -32,7 +32,7 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-DEFAULT_HOST = "ikealedmatrix.home.network"
+DEFAULT_HOST = "ikea-led.lan"
 
 
 class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -66,7 +66,8 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             host = user_input[CONF_HOST].strip()
-            effect = user_input[CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT]
+            effect = CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT
+            user_input[CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT] = effect
 
             # Check if already configured
             await self.async_set_unique_id(host.lower())
@@ -104,13 +105,12 @@ class IkeaObegransadLedFlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             data_schema=vol.Schema(
                 {
                     vol.Required(CONF_HOST, default=DEFAULT_HOST): str,
-                    vol.Required(
-                        CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT,
-                        default=CONF_DEFAULT_MESSAGE_BACKGROUND_EFFECT,
-                    ): str,
                     vol.Optional(CONF_WEATHER_LOCATION, default=""): str,
                 },
             ),
+            description_placeholders={
+                "host_example": DEFAULT_HOST,
+            },
             errors=self._errors,
         )
 

@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2026-02-07
+
+## Changes
+
+## :rocket: Features
+- Weather Location is now synced via `/api/config` so the sensor shows the device value when not set in the UI
+- Config form no longer shows the message background effect (DDP remains default behavior)
+
+## :hammer: Refactoring
+- Centralized config read/write helpers in API client for `/api/config`
+
+## :memo: Notes
+- Options page removed from UI to avoid empty settings screen
+- Host example placeholder is now populated in the setup form
+
 ## [0.5.0] - 2026-02-07
 
 ### Added

@@ -113,6 +113,32 @@ class IkeaObegransadLedApiClient:
             _LOGGER.exception("API connection error")  # Log connection errors
             return None  # Important: Return None on error
 
+    async def _request_json(
+        self, method: str, endpoint: str, payload: dict[str, Any]
+    ) -> dict[str, Any] | None:
+        """Perform a JSON request with a body payload."""
+        url = f"{self.base_url}/{endpoint}"
+        _LOGGER.debug("Making %s request to %s with json: %s", method, url, payload)
+        try:
+            async with self.session.request(
+                method, url, json=payload, timeout=TIMEOUT
+            ) as response:
+                _LOGGER.debug(
+                    "Received response with status: %s from %s", response.status, url
+                )
+                if response.status == HTTP_OK:
+                    try:
+                        return await response.json()
+                    except aiohttp.ContentTypeError:
+                        _LOGGER.exception("Invalid JSON response from %s", url)
+                        return None
+                text = await response.text()
+                _LOGGER.error("API Error %s from %s: %s", response.status, url, text)
+                return None
+        except aiohttp.ClientError:
+            _LOGGER.exception("API connection error")
+            return None
+
     async def get_info(self) -> dict[str, Any] | None:
         """Retrieve information about the device."""
         _LOGGER.debug("Requesting device info from %s", self.base_url)
@@ -316,6 +342,25 @@ class IkeaObegransadLedApiClient:
         """
         _LOGGER.debug("Clearing storage")
         return await self._request("GET", "storage/clear")
+
+    async def get_config(self) -> dict[str, Any] | None:
+        """Retrieve the device configuration."""
+        _LOGGER.debug("Requesting device config")
+        return await self._request("GET", "config")
+
+    async def set_config(self, config: dict[str, Any]) -> dict[str, Any] | None:
+        """Update the device configuration."""
+        _LOGGER.debug("Updating device config: %s", config)
+        return await self._request_json("POST", "config", config)
+
+    async def set_weather_location(self, location: str) -> bool:
+        """Set weather location using the config API."""
+        config = await self.get_config()
+        if not config:
+            return False
+        config["weatherLocation"] = location
+        response = await self.set_config(config)
+        return response is not None
 
     async def get_display_data(self) -> bytes | None:
         """

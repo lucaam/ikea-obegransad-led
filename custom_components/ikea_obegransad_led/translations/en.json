@@ -6,7 +6,7 @@
         "description": "Configure your IKEA OBEGRÄNSAD LED wall light. Example: {host_example}",
         "data": {
           "host": "Hostname or IP address",
-          "default_message_background_effect": "Default animation for messages"
+          "weather_location": "Weather Location"
         }
       }
     },
@@ -18,16 +18,6 @@
     "abort": {
       "already_configured": "This device is already configured.",
       "single_instance_allowed": "Only one instance per device is allowed."
-    }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "title": "IKEA OBEGRÄNSAD LED Options",
-        "data": {
-          "default_message_background_effect": "Default animation for messages"
-        }
-      }
     }
   },
   "services": {
@@ -151,6 +141,9 @@
       },
       "mac_address": {
         "name": "MAC Address"
+      },
+      "weather_location": {
+        "name": "Weather Location"
       }
     },
     "button": {

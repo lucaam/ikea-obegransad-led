@@ -6,7 +6,7 @@
         "description": "Configura la tua luce da parete IKEA OBEGRÄNSAD LED. Esempio: {host_example}",
         "data": {
           "host": "Nome host o indirizzo IP",
-          "default_message_background_effect": "Animazione predefinita per i messaggi"
+          "weather_location": "Localita meteo"
         }
       }
     },
@@ -18,16 +18,6 @@
     "abort": {
       "already_configured": "Questo dispositivo è già configurato.",
       "single_instance_allowed": "È consentita una sola istanza per dispositivo."
-    }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "title": "Opzioni IKEA OBEGRÄNSAD LED",
-        "data": {
-          "default_message_background_effect": "Animazione predefinita per i messaggi"
-        }
-      }
     }
   },
   "services": {
@@ -151,6 +141,9 @@
       },
       "mac_address": {
         "name": "Indirizzo MAC"
+      },
+      "weather_location": {
+        "name": "Localita meteo"
       }
     },
     "button": {

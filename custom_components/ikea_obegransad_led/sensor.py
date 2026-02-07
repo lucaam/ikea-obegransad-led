@@ -44,7 +44,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import CONF_HOST, CONF_WEATHER_LOCATION, DOMAIN, VERSION
+from .const import CONF_HOST, DOMAIN, VERSION
 
 _LOGGER: logging.Logger = logging.getLogger(__package__)
 
@@ -461,7 +461,7 @@ class IkeaObegransadWeatherLocationSensor(CoordinatorEntity, SensorEntity):
     @property
     def native_value(self) -> str | None:
         """Return the configured weather location."""
-        location = self.entry.data.get(CONF_WEATHER_LOCATION, "")
+        location = self.coordinator.weather_location
         return location if location else None
 
     @property
@@ -478,8 +478,7 @@ class IkeaObegransadWeatherLocationSensor(CoordinatorEntity, SensorEntity):
 
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        location = self.entry.data.get(CONF_WEATHER_LOCATION, "")
-        _LOGGER.debug("Weather location sensor update: %s", location)
+        _LOGGER.debug("Weather location sensor update: %s", self.coordinator.weather_location)
         self.async_write_ha_state()
 
 
