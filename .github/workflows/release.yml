@@ -42,7 +42,7 @@ jobs:
           zip ikea-obegransad-led.zip -r ./
 
       - name: 🔏 Sign release package
-        uses: sigstore/gh-action-sigstore-python@v3.0.0
+        uses: sigstore/gh-action-sigstore-python@v3.2.0
         with:
           inputs: "${{ env.IKEA_OBEGRANSAD_LED_ROOT_DIR }}/ikea-obegransad-led.zip"
 
