@@ -20,7 +20,7 @@ jobs:
       IKEA_OBEGRANSAD_LED_ROOT_DIR: "${{ github.workspace }}/custom_components/ikea_obegransad_led"
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set release version number in files
         shell: bash
